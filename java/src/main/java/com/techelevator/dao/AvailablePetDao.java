@@ -16,6 +16,8 @@ public interface AvailablePetDao {
 
     List<AvailablePet> getAvailablePetsByAdoptionStatus(String adoptionStatus);
 
+    AvailablePet getPetById(long petId);
+
     AvailablePet addPet(AvailablePet pet);
 
     void updatePet(AvailablePet pet);
