@@ -18,7 +18,7 @@ public class JdbcVolunteersDao implements VolunteerDao{
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('Volunteer','Admin')")
+    @PreAuthorize("hasRole('user')")
     public List<ShelterVolunteer> getAllVolunteers(){
         List<ShelterVolunteer> shelterVolunteers = new ArrayList<>();
         String sql = "SELECT first_name, last_name, email FROM volunteers";
