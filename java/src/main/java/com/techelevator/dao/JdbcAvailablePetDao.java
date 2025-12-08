@@ -66,36 +66,6 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     }
 
     @Override
-    public List<AvailablePet> getAvailablePetsByType(String type) {
-        List<AvailablePet> petsByType = new ArrayList<>();
-        String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
-                "where type = ? AND adoption_status = 'available'";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, type);
-        while(results.next()) {
-            AvailablePet pet = mapRowToAvailablePet(results);
-            petsByType.add(pet);
-        }
-        return petsByType;
-    }
-
-
-    @Override
-    public List<AvailablePet> getAvailablePetsByAdoptionStatus(String adoptionStatus) {
-        List<AvailablePet> petsByStatus = new ArrayList<>();
-        String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
-                "where adoption_status = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, adoptionStatus);
-        while(results.next()) {
-            AvailablePet pet = mapRowToAvailablePet(results);
-            petsByStatus.add(pet);
-        }
-        return petsByStatus;
-    }
-
-
-    @Override
     public AvailablePet addPet(AvailablePet pet) {
         AvailablePet returnedPet = new AvailablePet();
         String sql = "INSERT INTO available_pets (animal_type, breed, color, age, name, " +
@@ -125,6 +95,34 @@ return returnedPet;
             pets.add(pet);
         }
         return pets;
+    }
+
+    @Override
+    public List<AvailablePet> getAvailablePetByAdoptionStatus(String adoptionStatus) {
+        List<AvailablePet> petsByStatus = new ArrayList<>();
+        String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
+                "adoption_status, image_url FROM available_pets" +
+                "where adoption_status = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, adoptionStatus);
+        while(results.next()) {
+            AvailablePet pet = mapRowToAvailablePet(results);
+            petsByStatus.add(pet);
+        }
+        return petsByStatus;
+    }
+
+    @Override
+    public List<AvailablePet> getAvailablePetByType(String type) {
+        List<AvailablePet> petsByType = new ArrayList<>();
+        String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
+                "adoption_status, image_url FROM available_pets" +
+                "where type = ? AND adoption_status = 'available'";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, type);
+        while(results.next()) {
+            AvailablePet pet = mapRowToAvailablePet(results);
+            petsByType.add(pet);
+        }
+        return petsByType;
     }
 
     //TODO

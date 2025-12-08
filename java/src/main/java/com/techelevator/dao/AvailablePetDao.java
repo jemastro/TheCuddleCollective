@@ -12,14 +12,13 @@ public interface AvailablePetDao {
 
     List<AvailablePet> getAvailablePetsByAge(Integer age);
 
-    List<AvailablePet> getAvailablePetsByType(String type);
-
-    List<AvailablePet> getAvailablePetsByAdoptionStatus(String adoptionStatus);
-
     AvailablePet addPet(AvailablePet pet);
 
     void updatePet(AvailablePet pet);
 
     List<AvailablePet> getAllPets();
 
+    List<AvailablePet> getAvailablePetByAdoptionStatus(String adoptionStatus);
+
+    List<AvailablePet> getAvailablePetByType(String type);
 }

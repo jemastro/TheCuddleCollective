@@ -34,7 +34,7 @@ public class AvailablePetsController {
         return availablePets;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('user')")
     @PutMapping("/{id}")
     public void updateAvailablePets(@PathVariable Long id, @RequestBody AvailablePet pet){
         try{
@@ -45,7 +45,7 @@ public class AvailablePetsController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('user')")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public AvailablePet addAvailablePet(@RequestBody AvailablePet availablePet){
