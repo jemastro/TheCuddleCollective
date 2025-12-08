@@ -26,7 +26,7 @@ public interface AvailablePetDao {
 
     AvailablePet getAvailablePetByAdoptionStatus(String adoptionStatus);
 
-    void addPet(AvailablePet pet);
+    AvailablePet addPet(AvailablePet pet);
 
     void updatePet(AvailablePet pet);
 

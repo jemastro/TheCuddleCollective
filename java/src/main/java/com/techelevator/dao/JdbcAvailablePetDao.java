@@ -48,7 +48,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     }
 
     @Override
-    public void addPet(AvailablePet pet) {
+    public AvailablePet addPet(AvailablePet pet) {
 
     }
 
