@@ -12,5 +12,15 @@ export default{
 
     deleteFromVolunteer(volunteer_id){
         return axios.delete(`volunteers/${volunteer_id}`);
+},
+
+    submitApplication(applicant) {
+        return axios.post("/volunteer/submit", null, {
+            params: {
+                firstName: applicant.firstName,
+                lastName: applicant.lastName,
+                email: applicant.email
+            }
+        });
 }
 }
