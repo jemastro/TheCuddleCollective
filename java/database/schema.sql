@@ -7,6 +7,7 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL UNIQUE,
 	password_hash varchar(200) NOT NULL,
 	role varchar(50) NOT NULL,
+	first_login boolean NOT NULL DEFAULT TRUE,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
@@ -31,8 +32,8 @@ CREATE TABLE available_pets (
     name VARCHAR(150) NOT NULL,
     adoption_status adoption_status_enum NOT NULL,
     image_url VARCHAR(200) NOT NULL UNIQUE,
-    image_url1 VARCHAR(200) NOT NULL UNIQUE,
-    image_url2 VARCHAR(200) NOT NULL UNIQUE,
+    image_url1 VARCHAR(200) UNIQUE,
+    image_url2 VARCHAR(200) UNIQUE,
     CONSTRAINT PK_animal_id PRIMARY KEY (animal_id)
     );
 
