@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.AvailablePet;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -24,7 +25,4 @@ public interface AvailablePetDao {
 
     List<AvailablePet> getAllPets();
 
-    List<AvailablePet> getAvailablePetByAdoptionStatus(String adoptionStatus);
-
-    List<AvailablePet> getAvailablePetByType(String type);
 }

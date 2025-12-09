@@ -1,3 +1,23 @@
+
+/* Hex codes for Peggy's color preferences: 
+Soft Blue - 
+Primary blue: #b2cbf2
+Darker Blue: #92b6f0
+
+Warm Orange -
+Primary Orange: #df7234
+Darker Orange: 	#d34f00
+Almost Pinkish Orange?: #f49939
+
+Neutrals -
+Light Grays, White and Cream can exist with more normal CSS styling, maybe hex is needed for the grays but that's
+the hardest neutral to get right.
+
+The background should be with the primary blue (or if that's too distracting use cream), use darker blue for more focused 
+aspects of the page (behind photos or links maybe?)
+Supplementary text and borders should be neutral colors, while the buttons to navigate should be the oranges (might 
+work best with the fuzzy pictures of animals).
+*/
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -25,6 +45,7 @@ main {
     width: 100%;
     display: grid;
     grid-template-columns: 200px 2rem 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
         "header header header"
         "nav . main"
@@ -39,6 +60,7 @@ main {
     grid-area: header;
     background-color: #ffffff;
     padding: 5px;
+    text-align: center;
 }
 
 #app-header a {
@@ -73,6 +95,7 @@ main {
     text-align: center;
     opacity: 0.7;
     padding: 1rem;
+    margin-top: 2rem;
 }
 
 #main-nav {
@@ -184,3 +207,4 @@ tr {
 tr:nth-child(even) {
     background-color: rgba(136, 193, 231, 0.3);
 }
+

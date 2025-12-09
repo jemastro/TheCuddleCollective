@@ -8,25 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @CrossOrigin
-@RequestMapping( path = "/availablePets/breed/")
-public class AvailablePetsBreed {
+@RequestMapping( path = "/availablePets/id/")
+public class AvailablePetsIdController {
 
     private final AvailablePetDao availablePetDao;
 
     @Autowired
-    public AvailablePetsBreed(AvailablePetDao availablePetDao) {
+    public AvailablePetsIdController(AvailablePetDao availablePetDao) {
         this.availablePetDao = availablePetDao;
     }
 
-    @GetMapping("/{breed}")
-    public List<AvailablePet> availablePetsByBreed(@PathVariable String breed){
+    @GetMapping(path = "{id}")
+    public AvailablePet getAvailablePetById(@PathVariable long petId){
         try{
-            return availablePetDao.getAvailablePetsByBreed(breed);
+            return availablePetDao.getPetById(petId);
         } catch (DaoException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
