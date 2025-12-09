@@ -44,7 +44,7 @@ public class JdbcParentDao {
                 parent.setParentId(newParentId);
                 newParent = parent;
             } catch (Exception e){
-                throw new DaoException("Cannot add pet.",e);
+                throw new DaoException("Cannot add parent.",e);
             }
             return newParent;
         }
