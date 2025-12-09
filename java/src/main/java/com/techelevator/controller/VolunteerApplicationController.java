@@ -2,7 +2,6 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.ApplicantDao;
 import com.techelevator.model.Applicant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,6 @@ public class VolunteerApplicationController {
 
     private final ApplicantDao applicantDao;
 
-    @Autowired
     public VolunteerApplicationController(ApplicantDao applicantDao) {
         this.applicantDao = applicantDao;
     }
