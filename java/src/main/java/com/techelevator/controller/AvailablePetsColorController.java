@@ -25,7 +25,7 @@ public class AvailablePetsColorController {
     @GetMapping(path = "{color}")
     public List<AvailablePet> availablePetsByColor(@PathVariable String color){
         try{
-            return availablePetDao.getAvailablePetByColor(color);
+            return availablePetDao.getAvailablePetsByColor(color);
         } catch (DaoException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

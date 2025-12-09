@@ -8,6 +8,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -62,6 +63,37 @@ public class UserController {
         }
 
         return user;
+    }
+
+    @GetMapping(path = "/first-login")
+    public boolean isFirstLogin(Principal principal){
+        try {
+            User user = userDao.getUserByUsername(principal.getName());
+            return user.isFirst_login();
+        } catch (DaoException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PutMapping("/change-password")
+    public String changePassword(Principal principal, @RequestParam String newPassword){
+        try {
+            User user = userDao.getUserByUsername(principal.getName());
+            if(user == null){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+
+            String hashedPassword = new BCryptPasswordEncoder().encode(newPassword);
+
+            userDao.updatePassword(user.getId(), hashedPassword);
+
+            if(user.isFirst_login()){
+                userDao.updateFirstLogin(user.getId(), false);
+            }
+            return "Password has been successfully updated";
+        } catch (DaoException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
 }
