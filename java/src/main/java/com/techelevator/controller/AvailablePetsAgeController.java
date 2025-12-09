@@ -25,7 +25,7 @@ public class AvailablePetsAgeController {
     @GetMapping(path = "{age}")
     public List<AvailablePet> availablePetsByAge(@PathVariable Integer petAge){
         try{
-            return availablePetDao.getAvailablePetByAge(petAge);
+            return availablePetDao.getAvailablePetsByAge(petAge);
         } catch(DaoException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
             }

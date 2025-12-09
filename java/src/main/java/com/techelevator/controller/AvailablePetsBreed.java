@@ -25,7 +25,7 @@ public class AvailablePetsBreed {
     @GetMapping("/{breed}")
     public List<AvailablePet> availablePetsByBreed(@PathVariable String breed){
         try{
-            return availablePetDao.getAvailablePetByBreed(breed);
+            return availablePetDao.getAvailablePetsByBreed(breed);
         } catch (DaoException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -14,4 +14,8 @@ public interface UserDao {
     User getUserByUsername(String username);
 
     User createUser(RegisterUserDto user);
+
+    void updateFirstLogin(int user_id, boolean firstLogin);
+
+    void updatePassword(int user_id, String newPassword);
 }
