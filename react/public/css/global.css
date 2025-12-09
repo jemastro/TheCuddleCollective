@@ -25,6 +25,7 @@ main {
     width: 100%;
     display: grid;
     grid-template-columns: 200px 2rem 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
         "header header header"
         "nav . main"
@@ -39,6 +40,7 @@ main {
     grid-area: header;
     background-color: #ffffff;
     padding: 5px;
+    text-align: center;
 }
 
 #app-header a {
@@ -73,6 +75,7 @@ main {
     text-align: center;
     opacity: 0.7;
     padding: 1rem;
+    margin-top: 2rem;
 }
 
 #main-nav {
@@ -184,3 +187,4 @@ tr {
 tr:nth-child(even) {
     background-color: rgba(136, 193, 231, 0.3);
 }
+
