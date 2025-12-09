@@ -8,6 +8,8 @@ import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import VolunteerApplicationForm from './views/VolunteerApplicationView/VolunteerApplicationView';
+import VolunteerDirectory from './views/VolunteerDirectoryView/VolunteerDirectoryView';
 
 export default function App() {
 
