@@ -15,6 +15,7 @@ public class User {
    @JsonIgnore
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
+   private boolean first_login;
 
    public User() { }
 
@@ -62,7 +63,15 @@ public class User {
       return authorities;
    }
 
-   public void setAuthorities(Set<Authority> authorities) {
+    public boolean isFirst_login() {
+        return first_login;
+    }
+
+    public void setFirst_login(boolean first_login) {
+        this.first_login = first_login;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
       this.authorities = authorities;
    }
 
@@ -100,4 +109,8 @@ public class User {
               ", authorities=" + authorities +
               '}';
    }
+
+    public void setFirstLogin(boolean firstLogin) {
+
+    }
 }

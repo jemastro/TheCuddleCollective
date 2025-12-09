@@ -24,4 +24,7 @@ public interface AvailablePetDao {
 
     List<AvailablePet> getAllPets();
 
+    List<AvailablePet> getAvailablePetByAdoptionStatus(String adoptionStatus);
+
+    List<AvailablePet> getAvailablePetByType(String type);
 }
