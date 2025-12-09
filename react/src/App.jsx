@@ -4,10 +4,13 @@ import LoginView from './views/LoginView/LoginView';
 import LogoutView from './views/LogoutView';
 import RegisterView from './views/RegisterView/RegisterView';
 import UserProfileView from './views/UserProfileView/UserProfileView';
+import AvailablePets from './views/AvailablePetsView/AvailablePets';
 import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+impo
+
 
 export default function App() {
 
@@ -24,6 +27,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomeView />} />
               <Route path="/login" element={<LoginView />} />
+              <Route path="/availablePets" element={<AvailablePets />} />
               <Route path="/logout" element={<LogoutView />} />
               <Route path="/register" element={<RegisterView />} />
               <Route
@@ -35,15 +39,15 @@ export default function App() {
                 }
               />
               <Route path="/volunteer/apply" element={
-            <RequireAuth>
+            <ProtectedRoute>
               <VolunteerApplicationForm />
-            </RequireAuth>
+            </ProtectedRoute>
           }
         />
         <Route path="/volunteer/directory" element={
-            <RequireAuth>
+            <ProtectedRoute>
               <VolunteerDirectory />
-            </RequireAuth>
+            </ProtectedRoute>
           }
         />
             </Routes>
