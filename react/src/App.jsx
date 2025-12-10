@@ -4,6 +4,7 @@ import LoginView from './views/LoginView/LoginView';
 import LogoutView from './views/LogoutView';
 import RegisterView from './views/RegisterView/RegisterView';
 import UserProfileView from './views/UserProfileView/UserProfileView';
+import AvailablePets from './views/AvailablePetsView/AvailablePets';
 import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
@@ -26,6 +27,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomeView />} />
               <Route path="/login" element={<LoginView />} />
+              <Route path="/availablePets" element={<AvailablePets />} />
               <Route path="/logout" element={<LogoutView />} />
               <Route path="/register" element={<RegisterView />} />
               <Route
@@ -36,8 +38,8 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-            <Route path="/volunteer/apply" element={<VolunteerApplicationForm />} />
-        <Route path="/volunteer/directory" element={<VolunteerDirectory />}        />
+              <Route path="/volunteer/apply" element={<VolunteerApplicationForm />} />
+              <Route path="/volunteer/directory" element={<VolunteerDirectory />}        />
             </Routes>
           </main>
           <footer id = "app-footer">
