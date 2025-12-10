@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                 .sessionManagement( session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/availablePets").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/availablePets", "/availablePets/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

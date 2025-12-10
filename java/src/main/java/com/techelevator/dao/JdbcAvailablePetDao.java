@@ -27,7 +27,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public List<AvailablePet> getAvailablePetsByBreed(String breed) {
         List<AvailablePet> petsByBreed = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
+                "adoption_status, image_url, image_url1, image_url2 FROM available_pets " +
                 "where breed = ? AND adoption_status = 'available'";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, breed);
         while(results.next()) {
@@ -42,7 +42,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public List<AvailablePet> getAvailablePetsByColor(String color) {
         List<AvailablePet> petsByColor = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
+                "adoption_status, image_url, image_url1, image_url2 FROM available_pets " +
                 "where color = ? AND adoption_status = 'available'";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, color);
         while(results.next()) {
@@ -56,7 +56,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public List<AvailablePet> getAvailablePetsByAge(Integer age) {
         List<AvailablePet> petsByAge = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
+                "adoption_status, image_url, image_url1, image_url2 FROM available_pets " +
                 "where age = ? AND adoption_status = 'available'";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, age);
         while(results.next()) {
@@ -70,8 +70,8 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public List<AvailablePet> getAvailablePetsByType(String type) {
         List<AvailablePet> petsByType = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
-                "where type = ? AND adoption_status = 'available'";
+                "adoption_status, image_url, image_url1, image_url2 FROM available_pets " +
+                "where animal_type = ? AND adoption_status = 'available'";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, type);
         while(results.next()) {
             AvailablePet pet = mapRowToAvailablePet(results);
@@ -85,7 +85,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public List<AvailablePet> getAvailablePetsByAdoptionStatus(String adoptionStatus) {
         List<AvailablePet> petsByStatus = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
-                "adoption_status, image_url FROM available_pets" +
+                "adoption_status, image_url, image_url1, image_url2 FROM available_pets " +
                 "where adoption_status = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, adoptionStatus);
         while(results.next()) {
@@ -99,8 +99,8 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     @Override
     public AvailablePet getPetById(long petId) {
         AvailablePet petById = null;
-        String sql = "SELECT animal_id, animal_type, breed, color, age, name, \" +\n" +
-                "                \"adoption_status, image_url " +
+        String sql = "SELECT animal_id, animal_type, breed, color, age, name, " +
+                "adoption_status, image_url, image_url1, image_url2 " +
                 "FROM available_pets " +
                 "WHERE animal_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, petId);
@@ -115,11 +115,11 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     public AvailablePet addPet(AvailablePet pet) {
         AvailablePet returnedPet = new AvailablePet();
         String sql = "INSERT INTO available_pets (animal_type, breed, color, age, name, " +
-                "adoption_status, image_url, image_url1, image_url2"+
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                "adoption_status, image_url, image_url1, image_url2) "+
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "RETURNING animal_id";
         try {
-            long newAnimalId = jdbcTemplate.queryForObject(sql,int.class, pet.getAnimalType(), pet.getAnimalBreed(),
+            long newAnimalId = jdbcTemplate.queryForObject(sql,Long.class, pet.getAnimalType(), pet.getAnimalBreed(),
                     pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
                     pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
                     returnedPet = getPetById(newAnimalId);
@@ -136,12 +136,12 @@ return returnedPet;
     public void updatePet(AvailablePet pet) {
         AvailablePet updatedPet = new AvailablePet();
         String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?," +
-                " name = ?, adoption_status = ?, image_url = ?, image_url1 = ?, image_url2 = ?," +
-                "WHERE park_id = ?;";
+                " name = ?, adoption_status = ?, image_url = ?, image_url1 = ?, image_url2 = ?" +
+                "WHERE animal_id = ?;";
         try{
             int numberOfRows = jdbcTemplate.update(sql, pet.getAnimalType(), pet.getAnimalBreed(),
                     pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
-                    pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
+                    pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2(), pet.getAnimalId());
         if (numberOfRows==0){
             throw new DaoException("Couldn't update this pet!");
         } else {
@@ -164,7 +164,7 @@ return returnedPet;
     public List<AvailablePet> getAllPets() {
         List<AvailablePet> petList = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, " +
-                "name, adoption_status, image_url FROM available_pets";
+                "name, adoption_status, image_url, image_url1, image_url2 FROM available_pets";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next()) {
             AvailablePet pet = mapRowToAvailablePet(result);
@@ -181,9 +181,9 @@ return returnedPet;
         availablePet.setAnimalAge(rs.getInt("age"));
         availablePet.setAnimalName(rs.getString("name"));
         availablePet.setAdoptionStatus(rs.getString("adoption_status"));
-        availablePet.setImageUrl(rs.getString("image_url"));
-        availablePet.setImageUrl1(rs.getString("image_url1"));
-        availablePet.setImageUrl2(rs.getString("image_url2"));
+        availablePet.setImageUrl(rs.getString("image_url") != null ? rs.getString("image_url") : "/Images/default.png");
+        availablePet.setImageUrl1(rs.getString("image_url1") != null ? rs.getString("image_url1") : "/images/default.png");
+        availablePet.setImageUrl2(rs.getString("image_url2") != null ? rs.getString("image_url2") : "/images/default.png");
         return availablePet;
     }
 }
