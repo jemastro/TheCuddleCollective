@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@PreAuthorize("isAuthenticated()")
 @RequestMapping( path = "/availablePets")
 public class AvailablePetsController {
     private AvailablePetDao availablePetDao;
