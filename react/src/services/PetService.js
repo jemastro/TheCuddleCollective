@@ -1,16 +1,16 @@
 import axios from "axios";
 
-export default{
+export default {
 
-    getAllAvailablePets(){
-        return axios.get("/availablePets");
+    getAllAvailablePets() {
+        return axios.get("http://localhost:9000/availablePets");
     },
     
-    addNewPet(id){
-        return axios.post(`/availablePets/${id}`);
+    addNewPet(pet) {
+        return axios.post("http://localhost:9000/availablePets", pet);
     },
 
-    deleteFromPets(id){
-        return axios.delete(`/availablePets/${id}`);
+    deleteFromPets(id) {
+        return axios.delete(`http://localhost:9000/availablePets/${id}`);
     }
 }
