@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.AvailablePetDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.AvailablePet;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +15,6 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@PreAuthorize("isAuthenticated()")
 @RequestMapping( path = "/availablePets")
 public class AvailablePetsController {
     private AvailablePetDao availablePetDao;
@@ -25,6 +25,7 @@ public class AvailablePetsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @PermitAll
     public List<AvailablePet> getAllPets() {
         List<AvailablePet> availablePets = new ArrayList<>();
         try {
