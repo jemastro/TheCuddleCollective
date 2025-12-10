@@ -36,18 +36,8 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/volunteer/apply" element={
-            <RequireAuth>
-              <VolunteerApplicationForm />
-            </RequireAuth>
-          }
-        />
-        <Route path="/volunteer/directory" element={
-            <RequireAuth>
-              <VolunteerDirectory />
-            </RequireAuth>
-          }
-        />
+            <Route path="/volunteer/apply" element={<VolunteerApplicationForm />} />
+        <Route path="/volunteer/directory" element={<VolunteerDirectory />}        />
             </Routes>
           </main>
           <footer id = "app-footer">
