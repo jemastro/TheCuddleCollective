@@ -10,19 +10,20 @@ export default function AvailablePets() {
         async function fetchPets() {
             try {
                 const response = await PetService.getAllAvailablePets();
-                // Normalize backend data to camelCase
+
                 const normalizedPets = response.data.map(pet => ({
                     animalId: pet.animal_id,
                     animalType: pet.animal_type,
-                    breed: pet.breed,
-                    color: pet.color,
-                    age: pet.age,
-                    name: pet.name,
+                    breed: pet.animal_breed,
+                    color: pet.animal_color,
+                    age: pet.animal_age,
+                    name: pet.animal_name,
                     adoptionStatus: pet.adoption_status,
                     imageUrl: pet.image_url || '/images/default.png',
                     imageUrl1: pet.image_url1 || '/images/default.png',
                     imageUrl2: pet.image_url2 || '/images/default.png',
                 }));
+
                 setPets(normalizedPets);
             } catch (error) {
                 console.error("Error fetching pets:", error);
