@@ -31,7 +31,7 @@ export default function MainNav() {
         {user ? (
           <>
             <NavLink
-              to="/addOrUpdatePet"
+              to="/addOrUpdatePets"
               className={({ isActive }) =>
                 isActive ? styles.activeLink : styles.link
               }
