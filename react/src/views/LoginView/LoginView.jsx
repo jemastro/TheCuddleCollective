@@ -13,7 +13,6 @@ export default function LoginView() {
   const navigate = useNavigate();
   const [notification, setNotification] = useState(null);
 
-  // Setup state for the registration data
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,51 +21,58 @@ export default function LoginView() {
 
     AuthService.login({ username, password })
       .then((response) => {
-        // Grab the user and token
         const user = response.data.user;
         const token = response.data.token;
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        // Add the login data to local storage
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', token);
 
-        // Use the provided setter to add user to context
         setUser(user);
-
-        // Navigate to the home page
         navigate('/');
       })
       .catch((error) => {
-        // Check for a response message, but display a default if that doesn't exist
         const message = error.response?.data?.message || 'Login failed.';
-        setNotification({ type: 'error', message: message });
+        setNotification({ type: 'error', message });
       });
   }
 
   return (
-    <div id="view-login">
+    <div className={styles.loginView}>
       <h2>Log in</h2>
 
       <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.loginForm}>
 
-        <div className="form-control">
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" value={username} size="50" required autoFocus autoComplete="username"
-              onChange={(event) => setUsername(event.target.value)} />
-        </div>
+  <div className={styles.formControl}>
+    <label htmlFor="username">Username:</label>
+    <input 
+      type="text" 
+      id="username" 
+      value={username} 
+      required 
+      autoFocus 
+      autoComplete="username"
+      onChange={(event) => setUsername(event.target.value)} 
+    />
+  </div>
 
-        <div className="form-control">
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={password} size="50" required
-              onChange={(event) => setPassword(event.target.value)} />
-        </div>
+  <div className={styles.formControl}>
+    <label htmlFor="password">Password:</label>
+    <input 
+      type="password" 
+      id="password" 
+      value={password} 
+      required
+      onChange={(event) => setPassword(event.target.value)} 
+    />
+  </div>
 
-        <button type="submit" className={`btn-primary ${styles.formButton}`}>Sign in</button>
-        <Link to="/register">New? Register here!</Link>
-      </form>
+  <button type="submit" className={`btn-primary ${styles.formButton}`}>Sign in</button>
+  <Link to="/register" className={styles.registerLink}>New? Register here!</Link>
+</form>
+
     </div>
   );
 }
