@@ -24,4 +24,5 @@ public interface AvailablePetDao {
 
     List<AvailablePet> getAllPets();
 
+    List<AvailablePet> getAllAdoptedPets();
 }

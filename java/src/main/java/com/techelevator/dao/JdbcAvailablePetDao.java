@@ -180,6 +180,19 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         return petList;
     }
 
+    @Override
+    public List<AvailablePet> getAllAdoptedPets() {
+        List<AvailablePet> adoptedPets = new ArrayList<>();
+        String sql = "SELECT animal_id, animal_type, breed, color, age, " +
+                "name, image_url, image_url1, image_url2 FROM available_pets where adoption_status = 'approved'";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
+        while(result.next()){
+            AvailablePet pet = mapRowToAvailablePet(result);
+            adoptedPets.add(pet);
+        }
+        return adoptedPets;
+    }
+
     private AvailablePet mapRowToAvailablePet(SqlRowSet rs) {
         AvailablePet availablePet = new AvailablePet();
         availablePet.setAnimalId(rs.getLong("animal_id"));
