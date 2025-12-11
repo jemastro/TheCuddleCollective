@@ -164,7 +164,7 @@ return returnedPet;
     public List<AvailablePet> getAllPets() {
         List<AvailablePet> petList = new ArrayList<>();
         String sql = "SELECT animal_id, animal_type, breed, color, age, " +
-                "name, adoption_status, image_url, image_url1, image_url2 FROM available_pets";
+                "name, adoption_status, image_url, image_url1, image_url2 FROM available_pets WHERE adoption_status = 'available'";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next()) {
             AvailablePet pet = mapRowToAvailablePet(result);
@@ -181,7 +181,7 @@ return returnedPet;
         availablePet.setAnimalAge(rs.getInt("age"));
         availablePet.setAnimalName(rs.getString("name"));
         availablePet.setAdoptionStatus(rs.getString("adoption_status"));
-        availablePet.setImageUrl(rs.getString("image_url") != null ? rs.getString("image_url") : "/Images/default.png");
+        availablePet.setImageUrl(rs.getString("image_url") != null ? rs.getString("image_url") : "/images/default.png");
         availablePet.setImageUrl1(rs.getString("image_url1") != null ? rs.getString("image_url1") : "/images/default.png");
         availablePet.setImageUrl2(rs.getString("image_url2") != null ? rs.getString("image_url2") : "/images/default.png");
         return availablePet;
