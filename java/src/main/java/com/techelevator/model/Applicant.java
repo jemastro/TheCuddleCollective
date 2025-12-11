@@ -9,7 +9,6 @@ public class Applicant {
 //    last_name VARCHAR(100) NOT NULL,
 //    email VARCHAR(150) NOT NULL UNIQUE,
     private int volunteerApplicationId;
-    private int volunteerId;
     @NotBlank
     private String firstName;
     @NotBlank
@@ -36,14 +35,6 @@ public class Applicant {
 
     public void setVolunteerApplicationId(int volunteerApplicationId) {
         this.volunteerApplicationId = volunteerApplicationId;
-    }
-
-    public int getVolunteerId() {
-        return volunteerId;
-    }
-
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
     }
 
     public String getFirstName() {
