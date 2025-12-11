@@ -1,5 +1,6 @@
 package com.techelevator.controller;
 
+import com.techelevator.model.ShelterVolunteer;
 import com.techelevator.services.ApplicationApprovalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,8 @@ public class ApplicationApprovalController {
 
     @PostMapping("/{id}/approve")
     public ResponseEntity<?> approveApplication(@PathVariable int id){
-        approvalService.approve(id);
-        return ResponseEntity.ok().body("Application approved.");
+        ShelterVolunteer volunteer = approvalService.approve(id);
+        return ResponseEntity.ok(volunteer);
     }
 
     @PostMapping("/{id}/deny")

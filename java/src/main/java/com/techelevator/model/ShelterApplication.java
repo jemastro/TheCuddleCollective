@@ -2,7 +2,7 @@ package com.techelevator.model;
 
 public class ShelterApplication {
 
-    private int applicationId;  // PK in volunteer_applications table
+    private int applicationId;
     private String firstName;
     private String lastName;
     private String email;

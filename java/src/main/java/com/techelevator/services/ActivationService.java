@@ -15,19 +15,21 @@ public class ActivationService {
         this.passwordService = passwordService;
     }
 
-    public boolean isFirstTimeLogin(ShelterVolunteer vol) {
-        return vol.isFirstLogin() && vol.isTempPasswordActive();
+    public boolean isFirstTimeLogin(ShelterVolunteer volunteer){
+        return volunteer.isFirstLogin() && volunteer.isTemporaryPasswordActive();
     }
 
-    public boolean verifyTempPassword(ShelterVolunteer vol, String rawPassword) {
-        return passwordService.verifyPassword(rawPassword, vol.getPasswordHash());
+    public boolean verifyTempPassword(ShelterVolunteer volunteer, String rawPassword){
+        return passwordService.verifyPassword(rawPassword, volunteer.getPasswordHash());
     }
 
-    public void activateAccount(ShelterVolunteer vol, String newPassword) {
-        vol.setPasswordHash(passwordService.hashPassword(newPassword));
-        vol.setFirstLogin(false);
-        vol.setTempPasswordActive(false);
+    public void activateAccount(ShelterVolunteer volunteer, String newPassword){
+        String hashed = passwordService.hashPassword(newPassword);
 
-        volunteerDao.update(vol);
+        volunteer.setPasswordHash(hashed);
+        volunteer.setTemporaryPasswordActive(false);
+        volunteer.setFirstLogin(false);
+
+        volunteerDao.update(volunteer);
     }
 }

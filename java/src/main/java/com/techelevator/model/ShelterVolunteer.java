@@ -13,6 +13,7 @@ public class ShelterVolunteer {
     private String email;
     @NotBlank
     private String phoneNumber;
+
     private boolean firstLogin;
     private boolean temporaryPasswordActive;
     private String username;
@@ -22,12 +23,14 @@ public class ShelterVolunteer {
 
     }
 
-    public ShelterVolunteer(String volunteerId, String firstName, String lastName, String email, String phoneNumber){
+    public ShelterVolunteer(String volunteerId, String firstName, String lastName, String email, String phoneNumber, boolean firstLogin, boolean temporaryPasswordActive){
         this.volunteerId = volunteerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.firstLogin = true;
+        this.temporaryPasswordActive = false;
     }
 
     public String getVolunteerId() {

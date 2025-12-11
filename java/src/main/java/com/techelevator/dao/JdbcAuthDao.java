@@ -39,7 +39,7 @@ public class JdbcAuthDao implements AuthDao {
         vol.setEmail(rs.getString("email"));
         vol.setUsername(rs.getString("username"));
         vol.setPasswordHash(rs.getString("password_hash"));
-        vol.setTempPasswordActive(rs.getBoolean("temp_password_active"));
+        vol.setTemporaryPasswordActive(rs.getBoolean("temp_password_active"));
         vol.setFirstLogin(rs.getBoolean("first_login"));
         return vol;
     }

@@ -36,7 +36,7 @@ public class JdbcVolunteersDao implements VolunteerDao{
     }
 
     @Override
-    public ShelterVolunteer addVolunteer(ShelterVolunteer volunteer) {
+    public ShelterVolunteer createVolunteer(ShelterVolunteer volunteer) {
         String sql = "INSERT INTO volunteers (first_name, last_name, email) " +
                 "VALUES (?, ?, ?) RETURNING volunteer_id;";
         try {
@@ -62,11 +62,6 @@ public class JdbcVolunteersDao implements VolunteerDao{
     }
 
     @Override
-    public ShelterVolunteer findByUsername(String username) {
-        return null;
-    }
-
-    @Override
     public void update(ShelterVolunteer volunteer) {
 
         String sql = "UPDATE volunteers " +
@@ -80,10 +75,23 @@ public class JdbcVolunteersDao implements VolunteerDao{
                 volunteer.getEmail(),
                 volunteer.getUsername(),
                 volunteer.getPasswordHash(),
-                volunteer.isTempPasswordActive(),
+                volunteer.isTemporaryPasswordActive(),
                 volunteer.isFirstLogin(),
                 volunteer.getVolunteerId()
         );
+    }
+
+    @Override
+    public ShelterVolunteer findByUsername(String username) {
+        String sql = "SELECT volunteer_id, first_name, last_name, email, username, password_hash, temp_password_active, first_login " +
+                "FROM volunteers WHERE username = ?";
+
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, username);
+
+        if (rs.next()) {
+            return mapRowToVolunteer(rs);
+        }
+        return null;  // username not found
     }
 
 

@@ -15,8 +15,7 @@ public class FirstTimeLoginController {
     private final ActivationService activationService;
     private final AuthDao authDao;
 
-    public FirstTimeLoginController(ActivationService activationService,
-                                    AuthDao authDao) {
+    public FirstTimeLoginController(ActivationService activationService, AuthDao authDao) {
         this.activationService = activationService;
         this.authDao = authDao;
     }
@@ -27,6 +26,9 @@ public class FirstTimeLoginController {
         ShelterVolunteer vol = authDao.findByUsername(request.getUsername());
         if (vol == null) {
             throw new DaoException("User not found");
+        }
+        if (!activationService.isFirstTimeLogin(vol)) {
+            throw new DaoException("User is not eligible for first-time login");
         }
 
         activationService.activateAccount(vol, request.getNewPassword());

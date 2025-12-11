@@ -18,4 +18,3 @@ public class EmailService {
 }
     //To get recipients name, username, and generated temp password. This will send out an info email with login information
     //and instructions on how to reset password.
-}

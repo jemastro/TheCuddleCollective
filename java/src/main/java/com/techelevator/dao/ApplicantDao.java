@@ -1,8 +1,9 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Applicant;
+import com.techelevator.model.ShelterApplication;
 
 public interface ApplicantDao {
 
-    Applicant submitApplication(Applicant applicant);
+    ShelterApplication submitApplication(Applicant applicant);
 }
