@@ -7,6 +7,13 @@ const PetService = {
         return axios.get(API_URL);
     },
 
+    getAllPetsForUpdates() {
+        const token = localStorage.getItem('token');
+        return axios.get(`${API_URL}/addOrUpdatePets`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+    },
+
     addNewPet(pet) {
         const token = localStorage.getItem('token');
         return axios.post(API_URL, pet, {
