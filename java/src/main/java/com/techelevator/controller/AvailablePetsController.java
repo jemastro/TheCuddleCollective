@@ -59,4 +59,17 @@ public class AvailablePetsController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
+    @GetMapping("/addOrUpdatePets")
+    @PreAuthorize("isAuthenticated()")
+    public List<AvailablePet> getAllPetsForUpdates() {
+        List<AvailablePet> availablePets = new ArrayList<>();
+        try {
+            availablePets = availablePetDao.getAllPetsForUpdates();
+        }
+        catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return availablePets;
+    }
 }

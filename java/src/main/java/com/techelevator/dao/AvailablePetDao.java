@@ -27,4 +27,6 @@ public interface AvailablePetDao {
     List<AvailablePet> getAllAdoptedPets();
 
     void updatePetToAdopted(AvailablePet pet, int parent_id);
+
+    List<AvailablePet> getAllPetsForUpdates();
 }
