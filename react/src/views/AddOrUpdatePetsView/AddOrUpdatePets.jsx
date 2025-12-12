@@ -143,20 +143,35 @@ export default function AddOrUpdatePets() {
     }
   };
 
-const handleSearch = () => {
-  if (!searchTerm) return loadPets();
-  const lowerTerm = searchTerm.toLowerCase();
+const filterPets = (pets, term) => {
+  if (!term) return pets;
 
-  setPetsList((prev) =>
-    prev.filter((p) =>
-      (p.name && p.name.toLowerCase().includes(lowerTerm)) ||
-      (p.type && p.type.toLowerCase().includes(lowerTerm)) ||
-      (p.breed && p.breed.toLowerCase().includes(lowerTerm)) ||
-      (p.color && p.color.toLowerCase().includes(lowerTerm)) ||
-      (p.age && p.age.toString().includes(lowerTerm)) ||
-      (p.adoptionStatus && p.adoptionStatus.toLowerCase().includes(lowerTerm))
+  const words = term.toLowerCase().split(/\s+/); 
+  return pets.filter((p) =>
+    words.some((word) =>
+      (p.name && p.name.toLowerCase().includes(word)) ||
+      (p.type && p.type.toLowerCase().includes(word)) ||
+      (p.breed && p.breed.toLowerCase().includes(word)) ||
+      (p.color && p.color.toLowerCase().includes(word)) ||
+      (p.age && p.age.toString().includes(word)) ||
+      (p.adoptionStatus && p.adoptionStatus.toLowerCase().includes(word))
     )
   );
+};
+
+useEffect(() => {
+  if (!searchTerm) {
+    loadPets(); 
+    return;
+  }
+
+  setPetsList((prev) => filterPets(prev, searchTerm));
+}, [searchTerm, loadPets]);
+
+const handleSearch = () => {
+  loadPets().then((res) => {
+    setPetsList(filterPets(res.data.map(normalizePet), searchTerm));
+  });
 };
 
   if (!mode) {
