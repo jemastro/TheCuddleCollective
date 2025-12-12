@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.UserDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +33,7 @@ public class UserController {
 
     private UserDao userDao;
 
+    @Autowired
     public UserController(UserDao userDao) {
         this.userDao = userDao;
     }

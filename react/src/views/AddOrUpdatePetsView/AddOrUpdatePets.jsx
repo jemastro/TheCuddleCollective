@@ -14,6 +14,8 @@ export default function AddOrUpdatePets() {
     imageUrl: '',
     imageUrl1: '',
     imageUrl2: '',
+    animalId: null,
+    parentId: null
   });
   const [petsList, setPetsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,24 +34,27 @@ export default function AddOrUpdatePets() {
     headers: { Authorization: `Bearer ${token}` },
   });
 
+  // HELPER: convert backend snake_case to frontend camelCase
+  const normalizePet = (p) => ({
+    animalId: p.animal_id,
+    type: p.animal_type,
+    breed: p.animal_breed,
+    color: p.animal_color,
+    age: p.animal_age,
+    name: p.animal_name,
+    parentId: p.parent_id,
+    adoptionStatus: p.adoption_status,
+    imageUrl: p.image_url,
+    imageUrl1: p.image_url1,
+    imageUrl2: p.image_url2,
+  });
+
   // FETCH PETS
   const loadPets = useCallback(() => {
     axiosWithAuth
       .get('/availablePets')
       .then((res) => {
-        const normalized = res.data.map((p) => ({
-          animalId: p.animal_id,
-          type: p.animal_type,
-          breed: p.animal_breed,
-          color: p.animal_color,
-          age: p.animal_age,
-          name: p.animal_name,
-          adoptionStatus: p.adoption_status,
-          imageUrl: p.image_url,
-          imageUrl1: p.image_url1,
-          imageUrl2: p.image_url2,
-        }));
-        setPetsList(normalized);
+        setPetsList(res.data.map(normalizePet));
       })
       .catch((err) => console.error('Error fetching pets:', err));
   }, [axiosWithAuth]);
@@ -62,11 +67,13 @@ export default function AddOrUpdatePets() {
   useEffect(() => {
     if (selectedPet) {
       setFormData({
+        animalId: selectedPet.animalId,
         type: selectedPet.type || '',
         breed: selectedPet.breed || '',
         color: selectedPet.color || '',
         age: selectedPet.age ?? '',
         name: selectedPet.name || '',
+        parentId: selectedPet.parentId ?? null,
         adoptionStatus: selectedPet.adoptionStatus || 'available',
         imageUrl: selectedPet.imageUrl || '',
         imageUrl1: selectedPet.imageUrl1 || '',
@@ -85,6 +92,21 @@ export default function AddOrUpdatePets() {
     }
   };
 
+  // Map camelCase frontend to snake_case backend
+  const mapToSnakeCase = (data) => ({
+    animal_id: data.animalId,
+    animal_type: data.type,
+    animal_breed: data.breed,
+    animal_color: data.color,
+    animal_age: Number(data.age),
+    animal_name: data.name,
+    parent_id: data.parentId,
+    adoption_status: data.adoptionStatus,
+    image_url: data.imageUrl,
+    image_url1: data.imageUrl1,
+    image_url2: data.imageUrl2,
+  });
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,22 +122,21 @@ export default function AddOrUpdatePets() {
 
     if (hasFile) {
       payload = new FormData();
-      Object.keys(formData).forEach((key) => {
-        payload.append(key, formData[key]);
-      });
+      const mapped = mapToSnakeCase(formData);
+      Object.keys(mapped).forEach((key) => payload.append(key, mapped[key]));
       headers['Content-Type'] = 'multipart/form-data';
     } else {
-      payload = { ...formData };
+      payload = mapToSnakeCase(formData);
     }
 
     try {
       if (mode === 'add') {
         const res = await axiosWithAuth.post('/availablePets', payload, { headers });
-        setSuccessMessage(`Pet "${res.data.name}" added successfully!`);
+        setSuccessMessage(`Pet "${res.data.animal_name}" added successfully!`);
       } else if (mode === 'update') {
         if (!selectedPet) return alert('Select a pet to update');
         const res = await axiosWithAuth.put(`/availablePets/${selectedPet.animalId}`, payload, { headers });
-        setSuccessMessage(`Pet "${res.data.name}" updated successfully!`);
+        setSuccessMessage(`Pet "${res.data.animal_name}" updated successfully!`);
         loadPets();
       }
 
@@ -129,6 +150,8 @@ export default function AddOrUpdatePets() {
         imageUrl: '',
         imageUrl1: '',
         imageUrl2: '',
+        animalId: null,
+        parentId: null
       });
       setSelectedPet(null);
     } catch (err) {
@@ -141,9 +164,7 @@ export default function AddOrUpdatePets() {
   const handleSearch = () => {
     if (!searchTerm) return loadPets();
     setPetsList((prev) =>
-      prev.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      prev.filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   };
 
