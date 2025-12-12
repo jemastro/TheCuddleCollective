@@ -1,42 +1,39 @@
-/* Container for the entire login view */
 .loginView {
     display: flex;
     flex-direction: column;
-    align-items: center;       /* centers horizontally */
-    justify-content: center;   /* centers vertically */
-    min-height: 80vh;          /* pushes content toward center vertically */
+    align-items: center;       
+    justify-content: center;   
+    min-height: 80vh;         
     padding: 2rem;
     box-sizing: border-box;
-    background-color: #f5f5f5; /* optional: light background */
+    background-color: #f5f5f5; 
     text-align: center;
     border-radius: 15px;
 }
 
-/* Form container */
 .loginForm {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;                 /* spacing between inputs/buttons */
+    gap: 1rem;                 
     width: 100%;
-    max-width: 350px;          /* max width for larger screens */
-    background-color: #fff;    /* optional: white box for form */
+    max-width: 350px;         
+    background-color: #fff;    
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Form field wrapper */
 .formControl {
     display: flex;
-    flex-direction: column; /* stack label on top of input */
+    flex-direction: column;
     width: 100%;
-    text-align: left;       /* ensures label is aligned left */
+    text-align: left;       
     margin-bottom: 1rem;
 }
 
 .formControl label {
-    margin-bottom: 0.25rem; /* spacing above input */
+    margin-bottom: 0.25rem; 
     font-weight: bold;
 }
 
@@ -48,11 +45,10 @@
     box-sizing: border-box;
 }
 
-/* Submit button */
 .formButton {
     padding: 0.5rem 1rem;
     width: 100%;
-    background-color: #df7234; /* warm orange button */
+    background-color: #df7234;
     color: white;
     border: none;
     border-radius: 5px;
@@ -64,12 +60,11 @@
     background-color: #d34f00;
 }
 
-/* Register link below the button */
 .registerLink {
     margin-top: 0.5rem;
     text-align: center;
     display: block;
-    color: #92b6f0;           /* soft blue for link */
+    color: #92b6f0;           
     text-decoration: none;
 }
 
@@ -77,7 +72,6 @@
     text-decoration: underline;
 }
 
-/* Responsive adjustments */
 @media (max-width: 500px) {
     .loginForm {
         padding: 1rem;
