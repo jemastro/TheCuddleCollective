@@ -3,8 +3,10 @@ package com.techelevator.controller;
 import com.techelevator.dao.AvailablePetDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.AvailablePet;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,7 +16,6 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@PreAuthorize("isAuthenticated()")
 @RequestMapping( path = "/availablePets")
 public class AvailablePetsController {
     private AvailablePetDao availablePetDao;
@@ -25,6 +26,7 @@ public class AvailablePetsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @PermitAll
     public List<AvailablePet> getAllPets() {
         List<AvailablePet> availablePets = new ArrayList<>();
         try {
@@ -36,18 +38,18 @@ public class AvailablePetsController {
         return availablePets;
     }
 
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
-    public void updateAvailablePets(@PathVariable Long id, @RequestBody AvailablePet pet){
+    public AvailablePet updateAvailablePets(@PathVariable Long id, @RequestBody AvailablePet pet){
         try{
             pet.setAnimalId(id);
-            availablePetDao.updatePet(pet);
+            return availablePetDao.updatePet(pet);
         } catch (DaoException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update pet", e);
         }
     }
 
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public AvailablePet addAvailablePet(@RequestBody AvailablePet availablePet){

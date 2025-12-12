@@ -1,8 +1,13 @@
-.header {
-     margin: 1rem;
+.banner {
+     display: flex;
+     justify-content: center; 
+     align-items: center;     
+     height: 50vh;          
+     margin-left: 35vh;      
+     background-color: #b2cbf2;
 }
 
-.italicize {
-     font-style: italic;
-     margin-bottom: 1rem;
+.bannerImage {
+     max-width: 250vh;        
+     height: auto;
 }

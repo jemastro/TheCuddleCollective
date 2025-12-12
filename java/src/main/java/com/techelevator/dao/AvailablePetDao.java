@@ -20,8 +20,11 @@ public interface AvailablePetDao {
 
     AvailablePet addPet(AvailablePet pet);
 
-    void updatePet(AvailablePet pet);
+    AvailablePet updatePet(AvailablePet pet);
 
     List<AvailablePet> getAllPets();
 
+    List<AvailablePet> getAllAdoptedPets();
+
+    void updatePetToAdopted(AvailablePet pet, int parent_id);
 }
