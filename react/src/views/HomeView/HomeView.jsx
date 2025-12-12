@@ -6,8 +6,11 @@ export default function HomeView() {
 
   return (
     <div className={styles.container}>
-      {/* <span><AdoptedPetCarousel /></span> */}
       <h1 className={styles.welcome}>Welcome to the Cuddle Collective</h1>
+      {/* <br />
+      <h2>Recently Adopted Pets:
+        <AdoptedPetCarousel />
+      </h2> */}
       <br />
       <p className={styles.homePageText}>The Cuddle Collective is a warm, community-driven space dedicated to helping every animal 
         find a loving home. Here, future pet parents can browse adoptable pets, learn their stories, 
