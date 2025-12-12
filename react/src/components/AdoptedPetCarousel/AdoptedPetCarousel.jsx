@@ -1,7 +1,8 @@
-import React from "react";
+// import React from "react";
 import Slider from "react-slick";
+import PetService from "../../services/PetService";
 
-export default function SimpleSlider() {
+export default function AdoptedPetCarousel({pet, onPetAdd}) {
   var settings = {
     dots: true,
     infinite: true,
@@ -9,6 +10,13 @@ export default function SimpleSlider() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  function addAdoptedPet(){
+    PetService.addNewPet(pet)
+    .then((response) => {
+      onPetAdd((previous) => [...previous, response.data]);
+    })
+  }
    return (
     <Slider {...settings}>
       <div>
