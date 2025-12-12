@@ -22,6 +22,7 @@ public class AvailablePetsAdoptionStatusController {
     public AvailablePetsAdoptionStatusController(AvailablePetDao availablePetDao) {
         this.availablePetDao = availablePetDao;
     }
+
     @GetMapping(path = "{adoptionStatus}")
     public List<AvailablePet> availablePetsByAdoptionStatus(@PathVariable String adoptionStatus){
         try{

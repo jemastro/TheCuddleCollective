@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import styles from './AddOrUpdatePets.module.css';
-import axios from 'axios';
+import PetService from '../../services/PetService';
 
 export default function AddOrUpdatePets() {
   const [mode, setMode] = useState(null);
@@ -14,6 +14,8 @@ export default function AddOrUpdatePets() {
     imageUrl: '',
     imageUrl1: '',
     imageUrl2: '',
+    animalId: null,
+    parentId: null,
   });
   const [petsList, setPetsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,48 +27,40 @@ export default function AddOrUpdatePets() {
   });
   const [successMessage, setSuccessMessage] = useState('');
 
-  const token = localStorage.getItem('token');
-
-  const axiosWithAuth = axios.create({
-    baseURL: 'http://localhost:9000',
-    headers: { Authorization: `Bearer ${token}` },
+  const normalizePet = (p) => ({
+    animalId: p.animal_id,
+    type: p.animal_type,
+    breed: p.animal_breed,
+    color: p.animal_color,
+    age: p.animal_age,
+    name: p.animal_name,
+    parentId: p.parent_id,
+    adoptionStatus: p.adoption_status,
+    imageUrl: p.image_url,
+    imageUrl1: p.image_url1,
+    imageUrl2: p.image_url2,
   });
 
-  // FETCH PETS
   const loadPets = useCallback(() => {
-    axiosWithAuth
-      .get('/availablePets')
-      .then((res) => {
-        const normalized = res.data.map((p) => ({
-          animalId: p.animal_id,
-          type: p.animal_type,
-          breed: p.animal_breed,
-          color: p.animal_color,
-          age: p.animal_age,
-          name: p.animal_name,
-          adoptionStatus: p.adoption_status,
-          imageUrl: p.image_url,
-          imageUrl1: p.image_url1,
-          imageUrl2: p.image_url2,
-        }));
-        setPetsList(normalized);
-      })
+    PetService.getAllPetsForUpdates()
+      .then((res) => setPetsList(res.data.map(normalizePet)))
       .catch((err) => console.error('Error fetching pets:', err));
-  }, [axiosWithAuth]);
+  }, []);
 
   useEffect(() => {
     if (mode === 'update') loadPets();
   }, [mode, loadPets]);
 
-  // Pre-fill form when pet is selected
   useEffect(() => {
     if (selectedPet) {
       setFormData({
+        animalId: selectedPet.animalId,
         type: selectedPet.type || '',
         breed: selectedPet.breed || '',
         color: selectedPet.color || '',
         age: selectedPet.age ?? '',
         name: selectedPet.name || '',
+        parentId: selectedPet.parentId ?? null,
         adoptionStatus: selectedPet.adoptionStatus || 'available',
         imageUrl: selectedPet.imageUrl || '',
         imageUrl1: selectedPet.imageUrl1 || '',
@@ -75,7 +69,6 @@ export default function AddOrUpdatePets() {
     }
   }, [selectedPet]);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files && files[0]) {
@@ -85,10 +78,22 @@ export default function AddOrUpdatePets() {
     }
   };
 
-  // Handle form submission
+  const mapToSnakeCase = (data) => ({
+    animal_id: data.animalId,
+    animal_type: data.type,
+    animal_breed: data.breed,
+    animal_color: data.color,
+    animal_age: Number(data.age),
+    animal_name: data.name,
+    parent_id: data.parentId,
+    adoption_status: data.adoptionStatus,
+    image_url: data.imageUrl,
+    image_url1: data.imageUrl1,
+    image_url2: data.imageUrl2,
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!token) return alert('You must be logged in');
 
     const hasFile =
       imageOptions.imageUrl === 'upload' ||
@@ -96,28 +101,26 @@ export default function AddOrUpdatePets() {
       imageOptions.imageUrl2 === 'upload';
 
     let payload;
-    let headers = { Authorization: `Bearer ${token}` };
-
     if (hasFile) {
       payload = new FormData();
-      Object.keys(formData).forEach((key) => {
-        payload.append(key, formData[key]);
-      });
-      headers['Content-Type'] = 'multipart/form-data';
+      const mapped = mapToSnakeCase(formData);
+      Object.keys(mapped).forEach((key) => payload.append(key, mapped[key]));
     } else {
-      payload = { ...formData };
+      payload = mapToSnakeCase(formData);
     }
 
     try {
       if (mode === 'add') {
-        const res = await axiosWithAuth.post('/availablePets', payload, { headers });
-        setSuccessMessage(`Pet "${res.data.name}" added successfully!`);
+        const res = await PetService.addNewPet(payload);
+        setSuccessMessage(`Pet "${res.data.animal_name}" added successfully!`);
       } else if (mode === 'update') {
         if (!selectedPet) return alert('Select a pet to update');
-        const res = await axiosWithAuth.put(`/availablePets/${selectedPet.animalId}`, payload, { headers });
-        setSuccessMessage(`Pet "${res.data.name}" updated successfully!`);
+        const res = await PetService.updatePet(selectedPet.animalId, payload);
+        setSuccessMessage(`Pet "${res.data.animal_name}" updated successfully!`);
         loadPets();
       }
+
+      setTimeout(() => setSuccessMessage(''), 3 * 1000);
 
       setFormData({
         type: '',
@@ -129,25 +132,33 @@ export default function AddOrUpdatePets() {
         imageUrl: '',
         imageUrl1: '',
         imageUrl2: '',
+        animalId: null,
+        parentId: null,
       });
       setSelectedPet(null);
+
     } catch (err) {
       console.error('Failed to save pet:', err);
       alert('Failed to save pet. Check console for details.');
     }
   };
 
-  // Search pets
-  const handleSearch = () => {
-    if (!searchTerm) return loadPets();
-    setPetsList((prev) =>
-      prev.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  };
+const handleSearch = () => {
+  if (!searchTerm) return loadPets();
+  const lowerTerm = searchTerm.toLowerCase();
 
-  // Mode selection screen
+  setPetsList((prev) =>
+    prev.filter((p) =>
+      (p.name && p.name.toLowerCase().includes(lowerTerm)) ||
+      (p.type && p.type.toLowerCase().includes(lowerTerm)) ||
+      (p.breed && p.breed.toLowerCase().includes(lowerTerm)) ||
+      (p.color && p.color.toLowerCase().includes(lowerTerm)) ||
+      (p.age && p.age.toString().includes(lowerTerm)) ||
+      (p.adoptionStatus && p.adoptionStatus.toLowerCase().includes(lowerTerm))
+    )
+  );
+};
+
   if (!mode) {
     return (
       <div className={styles.container}>
@@ -177,7 +188,16 @@ export default function AddOrUpdatePets() {
               className={styles.searchInput}
             />
             <button onClick={handleSearch} className={styles.searchButton}>Search</button>
-            <button onClick={() => { setMode(null); setSelectedPet(null); setSearchTerm(''); }} className={styles.backButton}>Back</button>
+            <button
+              onClick={() => {
+                setMode(null);
+                setSelectedPet(null);
+                setSearchTerm('');
+              }}
+              className={styles.backButton}
+            >
+              Back
+            </button>
           </div>
 
           <div className={styles.petsList}>

@@ -116,8 +116,8 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         AvailablePet returnedPet = new AvailablePet();
         String sql = "INSERT INTO available_pets (animal_type, breed, color, age, name, " +
                 "adoption_status, image_url, image_url1, image_url2) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                "RETURNING animal_id";
+                "VALUES (?, ?, ?, ?, ?, ?::adoption_status_enum, ?, ?, ?) RETURNING animal_id";
+
         try {
             long newAnimalId = jdbcTemplate.queryForObject(sql, Long.class, pet.getAnimalType(), pet.getAnimalBreed(),
                     pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
@@ -133,8 +133,9 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     @Override
     public AvailablePet updatePet(AvailablePet pet) {
         String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?, " +
-                "name = ?, adoption_status = ?, image_url = ?, image_url1 = ?, image_url2 = ? " +
+                "name = ?, adoption_status = ?::adoption_status_enum, image_url = ?, image_url1 = ?, image_url2 = ? " +
                 "WHERE animal_id = ?";
+
         try {
             int rows = jdbcTemplate.update(sql,
                     pet.getAnimalType(),
@@ -189,11 +190,11 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
     }
         public void updatePetToAdopted(AvailablePet pet, int parent_id) {
         AvailablePet updatedPet = new AvailablePet();
-        String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?," +
-                " name = ?, adoption_status = ?, image_url = ?, image_url1 = ?, image_url2 = ?, parent_id = ?" +
-                "WHERE animal_id = ?;";
-        try{
-            int numberOfRows = jdbcTemplate.update(sql, pet.getAnimalType(), pet.getAnimalBreed(),
+            String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?," +
+                    " name = ?, adoption_status = ?::adoption_status_enum, image_url = ?, image_url1 = ?, image_url2 = ?, parent_id = ?" +
+                    "WHERE animal_id = ?;";
+            try{
+                int numberOfRows = jdbcTemplate.update(sql, pet.getAnimalType(), pet.getAnimalBreed(),
                     pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
                     pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2(), parent_id, pet.getAnimalId());
             if (numberOfRows==0){
@@ -206,6 +207,19 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         }catch(Exception e){
             throw new DaoException("Something went wrong updating the pet.",e);
         }
+    }
+
+    @Override
+    public List<AvailablePet> getAllPetsForUpdates() {
+        List<AvailablePet> petList = new ArrayList<>();
+        String sql = "SELECT animal_id, animal_type, breed, color, age, " +
+                "name, adoption_status, image_url, image_url1, image_url2 FROM available_pets";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
+        while (result.next()) {
+            AvailablePet pet = mapRowToAvailablePet(result);
+            petList.add(pet);
+        }
+        return petList;
     }
 
     private AvailablePet mapRowToAvailablePet(SqlRowSet rs) {
