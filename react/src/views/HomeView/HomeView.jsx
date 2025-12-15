@@ -1,5 +1,5 @@
-import AdoptedPetService from '../../services/AdoptedPetService';
-import AdoptedPetCarousel from '../../components/AdoptedPetCarousel/AdoptedPetCarousel'
+// import AdoptedPetService from '../../services/AdoptedPetService';
+// import AdoptedPetCarousel from '../../components/AdoptedPetCarousel/AdoptedPetCarousel'
 import styles from './HomeView.module.css';
 
 export default function HomeView() {
@@ -10,8 +10,8 @@ export default function HomeView() {
       {/* <br />
       <h2>Recently Adopted Pets:
         <AdoptedPetCarousel />
-      </h2> */}
-      <br />
+      </h2>
+      <br /> */}
       <p className={styles.homePageText}>The Cuddle Collective is a warm, community-driven space dedicated to helping every animal 
         find a loving home. Here, future pet parents can browse adoptable pets, learn their stories, 
         and connect with shelters in their area. We also make it easy for animal lovers to get involved 
