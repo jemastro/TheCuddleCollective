@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.AvailablePet;
@@ -117,17 +118,17 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         String sql = "INSERT INTO available_pets (animal_type, breed, color, age, name, " +
                 "adoption_status, image_url, image_url1, image_url2) " +
                 "VALUES (?, ?, ?, ?, ?, ?::adoption_status_enum, ?, ?, ?) RETURNING animal_id";
-
         try {
-            long newAnimalId = jdbcTemplate.queryForObject(sql, Long.class, pet.getAnimalType(), pet.getAnimalBreed(),
-                    pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
-                    pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
-            pet.setAnimalId(newAnimalId);
-            return getPetById(newAnimalId);
+            long newAnimalId = jdbcTemplate.queryForObject(sql, Long.class, pet.getAnimalType(),
+                pet.getAnimalBreed(), pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(),
+                pet.getAdoptionStatus(), pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
+                pet.setAnimalId(newAnimalId);
+                return getPetById(newAnimalId);
         } catch (Exception e) {
-            throw new DaoException("Cannot add pet.", e);
-        }
+            e.printStackTrace();
+            throw new DaoException("Cannot add pet.", e); }
     }
+
 
 
     @Override
