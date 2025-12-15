@@ -27,7 +27,6 @@ export default function AddOrUpdatePets() {
   });
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Normalize backend snake_case -> frontend camelCase
   const normalizePet = (p) => ({
     animalId: p.animal_id,
     type: p.animal_type,
@@ -42,40 +41,49 @@ export default function AddOrUpdatePets() {
     imageUrl2: p.image_url2,
   });
 
-  // Load pets from backend
-  const loadPets = useCallback(async () => {
-    try {
-      const res = await PetService.getAllPetsForUpdates();
-      setPetsList(res.data.map(normalizePet));
-    } catch (err) {
-      console.error('Error fetching pets:', err);
-    }
+  const loadPets = useCallback(() => {
+    PetService.getAllPetsForUpdates()
+      .then((res) => setPetsList(res.data.map(normalizePet)))
+      .catch((err) => console.error('Error fetching pets:', err));
   }, []);
 
   useEffect(() => {
     if (mode === 'update') loadPets();
   }, [mode, loadPets]);
 
-  // Prefill form when a pet is selected
   useEffect(() => {
-    if (selectedPet) {
+    if (selectedPet && mode === 'update') {
       setFormData({
         animalId: selectedPet.animalId,
-        type: selectedPet.type ?? '',
-        breed: selectedPet.breed ?? '',
-        color: selectedPet.color ?? '',
+        type: selectedPet.type || '',
+        breed: selectedPet.breed || '',
+        color: selectedPet.color || '',
         age: selectedPet.age ?? '',
-        name: selectedPet.name ?? '',
+        name: selectedPet.name || '',
         parentId: selectedPet.parentId ?? null,
-        adoptionStatus: selectedPet.adoptionStatus ?? 'available',
-        imageUrl: selectedPet.imageUrl ?? '',
-        imageUrl1: selectedPet.imageUrl1 ?? '',
-        imageUrl2: selectedPet.imageUrl2 ?? '',
+        adoptionStatus: selectedPet.adoptionStatus || '',
+        imageUrl: selectedPet.imageUrl || '',
+        imageUrl1: selectedPet.imageUrl1 || '',
+        imageUrl2: selectedPet.imageUrl2 || '',
       });
+    } else if(mode == 'add'){
+        setFormData({
+        type: '',
+        breed: '',
+        color: '',
+        age: '',
+        name: '',
+        adoptionStatus: '',
+        imageUrl: '',
+        imageUrl1: '',
+        imageUrl2: '',
+        animalId: null,
+        parentId: null,
+      });
+      setSelectedPet(null);
     }
-  }, [selectedPet]);
+  }, [selectedPet, mode]);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files && files[0]) {
@@ -85,7 +93,6 @@ export default function AddOrUpdatePets() {
     }
   };
 
-  // Map camelCase frontend -> snake_case backend
   const mapToSnakeCase = (data) => ({
     animal_id: data.animalId,
     animal_type: data.type,
@@ -95,48 +102,41 @@ export default function AddOrUpdatePets() {
     animal_name: data.name,
     parent_id: data.parentId,
     adoption_status: data.adoptionStatus,
-    image_url: data.imageUrl instanceof File ? undefined : data.imageUrl,
-    image_url1: data.imageUrl1 instanceof File ? undefined : data.imageUrl1,
-    image_url2: data.imageUrl2 instanceof File ? undefined : data.imageUrl2,
+    image_url: data.imageUrl,
+    image_url1: data.imageUrl1,
+    image_url2: data.imageUrl2,
   });
 
-  // Handle form submission with file uploads
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const hasFile =
+      imageOptions.imageUrl === 'upload' ||
+      imageOptions.imageUrl1 === 'upload' ||
+      imageOptions.imageUrl2 === 'upload';
+
+    let payload;
+    if (hasFile) {
+      payload = new FormData();
+      const mapped = mapToSnakeCase(formData);
+      Object.keys(mapped).forEach((key) => payload.append(key, mapped[key]));
+    } else {
+      payload = mapToSnakeCase(formData);
+    }
+
     try {
-      const formPayload = new FormData();
-      // JSON part
-      formPayload.append(
-        'data',
-        new Blob([JSON.stringify(mapToSnakeCase(formData))], { type: 'application/json' })
-      );
-
-      // File parts
-      if (imageOptions.imageUrl === 'upload' && formData.imageUrl instanceof File) {
-        formPayload.append('imageUrl', formData.imageUrl);
-      }
-      if (imageOptions.imageUrl1 === 'upload' && formData.imageUrl1 instanceof File) {
-        formPayload.append('imageUrl1', formData.imageUrl1);
-      }
-      if (imageOptions.imageUrl2 === 'upload' && formData.imageUrl2 instanceof File) {
-        formPayload.append('imageUrl2', formData.imageUrl2);
-      }
-
-      let res;
       if (mode === 'add') {
-        res = await PetService.addNewPet(formPayload);
+        const res = await PetService.addNewPet(payload);
         setSuccessMessage(`Pet "${res.data.animal_name}" added successfully!`);
       } else if (mode === 'update') {
         if (!selectedPet) return alert('Select a pet to update');
-        res = await PetService.updatePet(selectedPet.animalId, formPayload);
+        const res = await PetService.updatePet(selectedPet.animalId, payload);
         setSuccessMessage(`Pet "${res.data.animal_name}" updated successfully!`);
         loadPets();
       }
 
-      setTimeout(() => setSuccessMessage(''), 20 * 1000);
+      setTimeout(() => setSuccessMessage(''), 3 * 1000);
 
-      // Reset form
       setFormData({
         type: '',
         breed: '',
@@ -151,45 +151,29 @@ export default function AddOrUpdatePets() {
         parentId: null,
       });
       setSelectedPet(null);
+
     } catch (err) {
       console.error('Failed to save pet:', err);
       alert('Failed to save pet. Check console for details.');
     }
   };
 
-  // Filter pets by any attribute
-  const filterPets = (pets, term) => {
-    if (!term) return pets;
-    const words = term.toLowerCase().split(/\s+/);
-    return pets.filter((p) =>
-      words.some((word) =>
-        (p.name && p.name.toLowerCase().includes(word)) ||
-        (p.type && p.type.toLowerCase().includes(word)) ||
-        (p.breed && p.breed.toLowerCase().includes(word)) ||
-        (p.color && p.color.toLowerCase().includes(word)) ||
-        (p.age && p.age.toString().includes(word)) ||
-        (p.adoptionStatus && p.adoptionStatus.toLowerCase().includes(word))
-      )
-    );
-  };
+const handleSearch = () => {
+  if (!searchTerm) return loadPets();
+  const lowerTerm = searchTerm.toLowerCase();
 
-  // Update filtered pets as user types
-  useEffect(() => {
-    if (!searchTerm) {
-      loadPets();
-      return;
-    }
-    setPetsList((prev) => filterPets(prev, searchTerm));
-  }, [searchTerm, loadPets]);
+  setPetsList((prev) =>
+    prev.filter((p) =>
+      (p.name && p.name.toLowerCase().includes(lowerTerm)) ||
+      (p.type && p.type.toLowerCase().includes(lowerTerm)) ||
+      (p.breed && p.breed.toLowerCase().includes(lowerTerm)) ||
+      (p.color && p.color.toLowerCase().includes(lowerTerm)) ||
+      (p.age && p.age.toString().includes(lowerTerm)) ||
+      (p.adoptionStatus && p.adoptionStatus.toLowerCase().includes(lowerTerm))
+    )
+  );
+};
 
-  // Handle search button
-  const handleSearch = () => {
-    loadPets().then((res) => {
-      setPetsList(filterPets(res.data.map(normalizePet), searchTerm));
-    });
-  };
-
-  // Mode selection screen
   if (!mode) {
     return (
       <div className={styles.container}>
@@ -252,22 +236,22 @@ export default function AddOrUpdatePets() {
           <div className={styles.row}>
             <div className={styles.field}>
               <label htmlFor="name">Name</label>
-              <input type="text" id="name" name="name" value={formData.name ?? ''} onChange={handleChange} required />
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
             </div>
             <div className={styles.field}>
               <label htmlFor="type">Type</label>
-              <input type="text" id="type" name="type" value={formData.type ?? ''} onChange={handleChange} required />
+              <input type="text" id="type" name="type" value={formData.type} onChange={handleChange} required />
             </div>
           </div>
 
           <div className={styles.row}>
             <div className={styles.field}>
               <label htmlFor="breed">Breed</label>
-              <input type="text" id="breed" name="breed" value={formData.breed ?? ''} onChange={handleChange} required />
+              <input type="text" id="breed" name="breed" value={formData.breed} onChange={handleChange} required />
             </div>
             <div className={styles.field}>
               <label htmlFor="color">Color</label>
-              <input type="text" id="color" name="color" value={formData.color ?? ''} onChange={handleChange} required />
+              <input type="text" id="color" name="color" value={formData.color} onChange={handleChange} required />
             </div>
           </div>
 
@@ -281,7 +265,7 @@ export default function AddOrUpdatePets() {
           <div className={styles.row}>
             <div className={styles.field}>
               <label htmlFor="adoptionStatus">Adoption Status</label>
-              <select id="adoptionStatus" name="adoptionStatus" value={formData.adoptionStatus ?? 'available'} onChange={handleChange}>
+              <select id="adoptionStatus" name="adoptionStatus" value={formData.adoptionStatus} onChange={handleChange}>
                 <option value="available">Available</option>
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
@@ -306,7 +290,7 @@ export default function AddOrUpdatePets() {
                 </div>
 
                 {imageOptions[img] === 'url' ? (
-                  <input type="text" id={img} name={img} value={formData[img] ?? ''} onChange={handleChange} />
+                  <input type="text" id={img} name={img} value={formData[img]} onChange={handleChange} />
                 ) : (
                   <input type="file" id={img} name={img} accept="image/*" onChange={handleChange} />
                 )}

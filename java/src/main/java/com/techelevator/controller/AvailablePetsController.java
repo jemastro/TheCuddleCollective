@@ -7,6 +7,7 @@ import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,35 +57,44 @@ public class AvailablePetsController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(path = "/pets", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.CREATED)
-    public AvailablePet addAvailablePet(
-            @RequestPart("data") AvailablePet availablePet,       // JSON part
-            @RequestPart(value = "imageUrl", required = false) MultipartFile image,
-            @RequestPart(value = "imageUrl1", required = false) MultipartFile image1,
-            @RequestPart(value = "imageUrl2", required = false) MultipartFile image2
+    public ResponseEntity<?> addPet(
+            @RequestPart("data") AvailablePet petData,                          // JSON part
+            @RequestPart(value = "imageUrl", required = false) MultipartFile mainImage,
+            @RequestPart(value = "imageUrl1", required = false) MultipartFile extraImage1,
+            @RequestPart(value = "imageUrl2", required = false) MultipartFile extraImage2
     ) {
         try {
-            // Save files and set URLs
-            if (image != null && !image.isEmpty()) {
-                availablePet.setImageUrl(saveFile(image));
-            }
-            if (image1 != null && !image1.isEmpty()) {
-                availablePet.setImageUrl1(saveFile(image1));
-            }
-            if (image2 != null && !image2.isEmpty()) {
-                availablePet.setImageUrl2(saveFile(image2));
+            // Save main image if provided
+            if (mainImage != null && !mainImage.isEmpty()) {
+                String url = saveFile(mainImage);
+                petData.setImageUrl(url);
             }
 
-            // Save pet to DB
-            return availablePetDao.addPet(availablePet);
+            // Save extra images if provided
+            if (extraImage1 != null && !extraImage1.isEmpty()) {
+                String url1 = saveFile(extraImage1);
+                petData.setImageUrl1(url1);
+            }
 
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            if (extraImage2 != null && !extraImage2.isEmpty()) {
+                String url2 = saveFile(extraImage2);
+                petData.setImageUrl2(url2);
+            }
+
+            // Save pet to DB via DAO
+            AvailablePet savedPet = availablePetDao.addPet(petData);
+
+            return ResponseEntity.ok(savedPet);
+
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save files", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save uploaded files", e);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save pet", e);
         }
     }
+
 
 
     @GetMapping("/addOrUpdatePets")
