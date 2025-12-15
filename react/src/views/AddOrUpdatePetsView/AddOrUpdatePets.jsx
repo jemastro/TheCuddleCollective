@@ -52,7 +52,7 @@ export default function AddOrUpdatePets() {
   }, [mode, loadPets]);
 
   useEffect(() => {
-    if (selectedPet) {
+    if (selectedPet && mode === 'update') {
       setFormData({
         animalId: selectedPet.animalId,
         type: selectedPet.type || '',
@@ -61,13 +61,28 @@ export default function AddOrUpdatePets() {
         age: selectedPet.age ?? '',
         name: selectedPet.name || '',
         parentId: selectedPet.parentId ?? null,
-        adoptionStatus: selectedPet.adoptionStatus || 'available',
+        adoptionStatus: selectedPet.adoptionStatus || '',
         imageUrl: selectedPet.imageUrl || '',
         imageUrl1: selectedPet.imageUrl1 || '',
         imageUrl2: selectedPet.imageUrl2 || '',
       });
+    } else if(mode == 'add'){
+        setFormData({
+        type: '',
+        breed: '',
+        color: '',
+        age: '',
+        name: '',
+        adoptionStatus: '',
+        imageUrl: '',
+        imageUrl1: '',
+        imageUrl2: '',
+        animalId: null,
+        parentId: null,
+      });
+      setSelectedPet(null);
     }
-  }, [selectedPet]);
+  }, [selectedPet, mode]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
