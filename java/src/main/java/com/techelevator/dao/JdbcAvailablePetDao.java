@@ -120,10 +120,10 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
                 "VALUES (?, ?, ?, ?, ?, ?::adoption_status_enum, ?, ?, ?) RETURNING animal_id";
         try {
             long newAnimalId = jdbcTemplate.queryForObject(sql, Long.class, pet.getAnimalType(),
-                pet.getAnimalBreed(), pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(),
-                pet.getAdoptionStatus(), pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
-                pet.setAnimalId(newAnimalId);
-                return getPetById(newAnimalId);
+                    pet.getAnimalBreed(), pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(),
+                    pet.getAdoptionStatus().toLowerCase(), pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2());
+            pet.setAnimalId(newAnimalId);
+            return getPetById(newAnimalId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new DaoException("Cannot add pet.", e); }
@@ -144,7 +144,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
                     pet.getAnimalColor(),
                     pet.getAnimalAge(),
                     pet.getAnimalName(),
-                    pet.getAdoptionStatus(),
+                    pet.getAdoptionStatus().toLowerCase(),
                     pet.getImageUrl(),
                     pet.getImageUrl1(),
                     pet.getImageUrl2(),
@@ -154,15 +154,13 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
             }
             return getPetById(pet.getAnimalId());
         } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
             throw new DaoException("Can't update the pet with the given data", e);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DaoException("Something went wrong updating the pet.", e);
         }
     }
-
-    // TODO How do we add pets from available to adopted table? Use insert statement to add
-    // pet to adopted table and delete statement to remove from current table
-
 
     @Override
     public List<AvailablePet> getAllPets() {
@@ -189,13 +187,13 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         }
         return adoptedPets;
     }
-        public void updatePetToAdopted(AvailablePet pet, int parent_id) {
+    public void updatePetToAdopted(AvailablePet pet, int parent_id) {
         AvailablePet updatedPet = new AvailablePet();
-            String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?," +
-                    " name = ?, adoption_status = ?::adoption_status_enum, image_url = ?, image_url1 = ?, image_url2 = ?, parent_id = ?" +
-                    "WHERE animal_id = ?;";
-            try{
-                int numberOfRows = jdbcTemplate.update(sql, pet.getAnimalType(), pet.getAnimalBreed(),
+        String sql = "UPDATE available_pets SET animal_type = ?, breed = ?, color = ?, age = ?," +
+                " name = ?, adoption_status = ?::adoption_status_enum, image_url = ?, image_url1 = ?, image_url2 = ?, parent_id = ?" +
+                "WHERE animal_id = ?;";
+        try{
+            int numberOfRows = jdbcTemplate.update(sql, pet.getAnimalType(), pet.getAnimalBreed(),
                     pet.getAnimalColor(), pet.getAnimalAge(), pet.getAnimalName(), pet.getAdoptionStatus(),
                     pet.getImageUrl(), pet.getImageUrl1(), pet.getImageUrl2(), parent_id, pet.getAnimalId());
             if (numberOfRows==0){
@@ -205,7 +203,7 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
             }
         } catch(DataIntegrityViolationException e){
             throw new DaoException("Can't update the pet with the given data", e);
-        }catch(Exception e){
+        } catch(Exception e){
             throw new DaoException("Something went wrong updating the pet.",e);
         }
     }
@@ -239,4 +237,3 @@ public class JdbcAvailablePetDao implements AvailablePetDao {
         return availablePet;
     }
 }
-
