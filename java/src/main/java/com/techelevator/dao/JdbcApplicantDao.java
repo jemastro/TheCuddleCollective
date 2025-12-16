@@ -15,8 +15,9 @@ public class JdbcApplicantDao implements ApplicantDao {
 
     @Override
     public Applicant submitApplication(Applicant applicant) {
+
         String sql =
-                "INSERT INTO volunteer_applications (first_name, last_name, email, phone_number, volunteer_application_status) " +
+                "INSERT INTO volunteer_applications(first_name, last_name, email, phone_number, volunteer_application_status) " +
                         "VALUES (?, ?, ?, ?, 'pending') RETURNING volunteer_application_id";
 
         Integer newId = jdbcTemplate.queryForObject(
