@@ -15,9 +15,10 @@ public class JdbcApplicantDao implements ApplicantDao {
 
     @Override
     public Applicant submitApplication(Applicant applicant) {
+
         String sql =
-                "INSERT INTO volunteer_applications (first_name, last_name, email, phone_number, volunteer_application_status) " +
-                        "VALUES (?, ?, ?, ?, 'pending') RETURNING volunteer_application_id;";
+                "INSERT INTO volunteer_applications(first_name, last_name, email, phone_number, volunteer_application_status) " +
+                        "VALUES (?, ?, ?, ?, 'pending') RETURNING volunteer_application_id";
 
         Integer newId = jdbcTemplate.queryForObject(
                 sql,
@@ -28,13 +29,8 @@ public class JdbcApplicantDao implements ApplicantDao {
                 applicant.getPhoneNumber()
         );
 
-        Applicant shelterApp = new Applicant();
-        shelterApp.setApplicationId(newId);
-        shelterApp.setFirstName(applicant.getFirstName());
-        shelterApp.setLastName(applicant.getLastName());
-        shelterApp.setEmail(applicant.getEmail());
-        shelterApp.setPhoneNumber(applicant.getPhoneNumber());
-
-        return shelterApp;
+        applicant.setApplicationId(newId);
+        applicant.setStatus("pending");
+        return applicant;
     }
 }

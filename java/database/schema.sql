@@ -1,6 +1,12 @@
 BEGIN TRANSACTION;
 
+DROP TABLE IF EXISTS volunteer_applications;
+DROP TABLE IF EXISTS available_pets;
+DROP TABLE IF EXISTS volunteers;
+DROP TABLE IF EXISTS parent;
 DROP TABLE IF EXISTS users;
+DROP TYPE IF EXISTS volunteer_application_status_enum;
+DROP TYPE IF EXISTS adoption_status_enum;
 
 --rollback;
 
@@ -57,12 +63,13 @@ CREATE TABLE available_pets (
 CREATE TYPE volunteer_application_status_enum AS ENUM ('pending', 'approved', 'rejected');
 
 --Create table for pending volunteer applications
-CREATE TABLE volunteer_applications (
+CREATE TABLE volunteer_applications(
     volunteer_application_id SERIAL PRIMARY KEY,
     volunteer_id INT REFERENCES volunteers(volunteer_id),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
+    phone_number VARCHAR(12) NOT NULL UNIQUE,
     volunteer_application_status volunteer_application_status_enum NOT NULL
 );
 
