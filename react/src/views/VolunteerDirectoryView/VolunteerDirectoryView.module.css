@@ -1,0 +1,138 @@
+.container {
+     background-color: #B2CBF2; 
+     min-height: 100vh;
+     padding: 2rem;
+     font-family: 'Arial', sans-serif;
+     color: #333; 
+}
+
+.title {
+     text-align: center;
+     font-size: 2rem;
+     font-weight: bold;
+     color: #092B4C; 
+     margin-bottom: 1.5rem;
+}
+
+.form {
+     display: flex;
+     gap: 1rem;
+     margin-bottom: 1.5rem;
+     flex-wrap: wrap;
+     justify-content: center;
+}
+
+.form input {
+     padding: 0.6rem 1rem;
+     border-radius: 8px;
+     border: 1px solid #ccc; 
+     font-size: 1rem;
+     outline: none;
+     transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form input:focus {
+     border-color: #92B6F0; 
+     box-shadow: 0 0 5px rgba(146, 182, 240, 0.5);
+}
+
+.table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-bottom: 1.5rem;
+     background-color: #fff; 
+     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+     border-radius: 12px;
+     overflow: hidden;
+}
+
+.table th,
+.table td {
+     padding: 0.8rem 1rem;
+     text-align: left;
+     border-bottom: 1px solid #e0e0e0; 
+}
+
+.table th {
+     background-color: #92B6F0;
+     color: #fff;
+     font-weight: bold;
+}
+
+.table tr:hover {
+     background-color: #DFEAF9; 
+     cursor: pointer;
+}
+
+.selectedRow {
+     background-color: #F0F7FF; 
+}
+
+.buttonContainer {
+     display: flex;
+     gap: 1rem;
+     justify-content: center;
+     flex-wrap: wrap;
+}
+
+.updateButton {
+     background-color: #DF7234; /* Warm Orange */
+     color: #fff;
+     border: none;
+     padding: 0.7rem 1.4rem;
+     border-radius: 8px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: background-color 0.3s;
+}
+
+.updateButton:hover:not(:disabled) {
+     background-color: #D34F00; 
+}
+
+.updateButton:disabled {
+     background-color: #F49939; 
+     cursor: not-allowed;
+}
+
+.deleteButton {
+     background-color: #F49939; 
+     color: #fff;
+     border: none;
+     padding: 0.7rem 1.4rem;
+     border-radius: 8px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: background-color 0.3s;
+}
+
+.deleteButton:hover:not(:disabled) {
+     background-color: #DF7234; 
+}
+
+.deleteButton:disabled {
+     background-color: #e6a16d;
+     cursor: not-allowed;
+}
+
+.cancelButton {
+     background-color: #ccc; 
+     color: #333;
+     border: none;
+     padding: 0.7rem 1.4rem;
+     border-radius: 8px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: background-color 0.3s;
+}
+
+.cancelButton:hover {
+     background-color: #999; 
+}
+
+.message {
+     text-align: center;
+     font-size: 1.2rem;
+     color: #444; 
+     margin-top: 2rem;
+}
