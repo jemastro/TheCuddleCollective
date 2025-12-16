@@ -34,10 +34,10 @@ export default{
         });
 },
 
-    updateVolunteer(volunteer){
-        const token = localStorage.getItem('token');
-        return axios.put(`/volunteers/${volunteer.volunteerId}`, volunteer, {
-            headers: {Authorization: `Bearer ${token}`}
+    updateVolunteer(id, volunteerData) {
+        const token = localStorage.getItem("token");
+        return axios.put(`/volunteers/${id}`, volunteerData, {
+        headers: { Authorization: `Bearer ${token}` },
         });
     }
 }

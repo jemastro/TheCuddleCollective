@@ -21,24 +21,24 @@ public class VolunteerController {
     }
 
     @GetMapping("/volunteer/directory")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public List<ShelterVolunteer> listAllVolunteers(){
         return volunteerDao.getAllVolunteers();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/volunteers")
     public ShelterVolunteer addVolunteer(@RequestBody ShelterVolunteer v) {
         return volunteerDao.createVolunteer(v);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/volunteers/{id}")
     public void deleteVolunteer(@PathVariable int id) {
         volunteerDao.deleteVolunteer(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/volunteers/{id}")
     public ShelterVolunteer updateVolunteer(@PathVariable String id, @RequestBody ShelterVolunteer volunteer) {
         volunteer.setVolunteerId(id);

@@ -67,19 +67,14 @@ public class JdbcVolunteersDao implements VolunteerDao{
     public ShelterVolunteer update(ShelterVolunteer volunteer) {
         try {
             String sql = "UPDATE volunteers " +
-                    "SET first_name = ?, last_name = ?, email = ?, username = ?, " +
-                    "password_hash = ?, temp_password_active = ?, first_login = ? " +
+                    "SET first_name = ?, last_name = ?, email = ? " +
                     "WHERE volunteer_id = ?";
 
             jdbcTemplate.update(sql,
                     volunteer.getFirstName(),
                     volunteer.getLastName(),
                     volunteer.getEmail(),
-                    volunteer.getUsername(),
-                    volunteer.getPasswordHash(),
-                    volunteer.isTemporaryPasswordActive(),
-                    volunteer.isFirstLogin(),
-                    volunteer.getVolunteerId()
+                    Integer.parseInt(volunteer.getVolunteerId())
             );
             return volunteer;
         } catch (DaoException e){
