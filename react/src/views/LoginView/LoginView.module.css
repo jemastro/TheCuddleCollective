@@ -1,127 +1,119 @@
-/* LoginView.module.css */
-
-/* Container for the login view */
 .viewLogin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;      
-  justify-content: center;  
-  min-height: 100vh;        
-  padding: 2rem;
-  background-color: #B2CBF2; /* primary soft blue background */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-sizing: border-box;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     min-height: 90vh;           
+     padding: 1.5rem;            
+     background-color: #B2CBF2;  
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     box-sizing: border-box;
+     width: 100%;
 }
 
-/* Page title */
 .viewLogin h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #333333; /* neutral dark text */
-  text-align: center;
+     font-size: 1.8rem;          
+     margin-bottom: 1.2rem;
+     color: #333333;
+     text-align: center;
 }
 
-/* Notification container */
 .notificationWrapper {
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 1rem;
+     width: 100%;
+     max-width: 700px;
+     margin-bottom: 0.8rem;
 }
 
-/* Form container */
 form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background-color: #FFFFFF; /* clean neutral form background */
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  margin: 0 auto;
-  border: 1px solid #D9D9D9; /* subtle neutral border */
+     display: flex;
+     flex-direction: column;
+     width: 100%;
+     max-width: 500px;           
+     padding: 2rem;            
+     background-color: #FFFFFF;
+     border-radius: 12px;
+     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); 
+     box-sizing: border-box;
+     margin: 0 auto;
+     border: 1px solid #D9D9D9;
 }
 
-/* Individual form fields */
-.form-control {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.25rem;
+.formControl {
+     display: flex;
+     flex-direction: column;
+     margin-bottom: 1.2rem;      
+     width: 100%;
 }
 
-/* Labels */
-.form-control label {
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333333; /* neutral text */
+.formControl label {
+     margin-bottom: 0.4rem;
+     font-weight: 600;
+     color: #333333;
+     width: 100%;
 }
 
-/* Inputs */
-.form-control input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #A0A0A0;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-  box-sizing: border-box; /* <-- this fixes the overflow */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.formControl input {
+     padding: 0.75rem;            
+     border: 1px solid #A0A0A0;
+     border-radius: 8px;
+     font-size: 1rem;
+     width: 100%;
+     box-sizing: border-box;
+     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-control input:focus {
-  border-color: #92B6F0; /* darker blue focus */
-  box-shadow: 0 0 0 3px rgba(146, 182, 240, 0.3);
-  outline: none;
+.formControl input:focus {
+     border-color: #92B6F0;
+     box-shadow: 0 0 0 2.5px rgba(146, 182, 240, 0.3); 
+     outline: none;
 }
 
-/* Submit button */
 .formButton {
-  padding: 0.75rem 1rem;
-  background-color: #DF7234; /* warm orange */
-  color: #FFFFFF;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+     padding: 0.65rem 1rem;      
+     background-color: #DF7234;
+     color: #FFFFFF;
+     font-size: 0.95rem;        
+     font-weight: 600;
+     border: none;
+     border-radius: 8px;
+     cursor: pointer;
+     margin-bottom: 1rem;
+     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .formButton:hover {
-  background-color: #D34F00; /* darker orange hover */
-  transform: translateY(-1px);
+     background-color: #D34F00;
+     transform: translateY(-1px);
 }
 
 .formButton:active {
-  transform: translateY(0);
+     transform: translateY(0);
 }
 
-/* Links */
 a {
-  color: #F49939; /* almost pinkish orange */
-  text-decoration: none;
-  font-weight: 500;
-  text-align: center;
-  transition: color 0.2s ease;
+     color: #F49939;
+     text-decoration: none;
+     font-weight: 500;
+     text-align: center;
+     transition: color 0.2s ease;
 }
 
 a:hover {
-  color: #D34F00; /* darker orange on hover for consistency */
+     color: #D34F00;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
-  form {
-    padding: 1.5rem;
-  }
+form {
+     padding: 1.5rem;
+}
 
-  .form-control input {
-    font-size: 0.95rem;
-  }
+.formControl input {
+     font-size: 0.95rem;
+     padding: 0.7rem;
+}
 
-  .formButton {
-    font-size: 0.95rem;
-    padding: 0.65rem 1rem;
-  }
+.formButton {
+     font-size: 0.9rem;
+     padding: 0.6rem 1rem;
+     }
 }
