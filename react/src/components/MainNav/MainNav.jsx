@@ -6,6 +6,8 @@ import styles from './MainNav.module.css';
 export default function MainNav() {
   const { user } = useContext(UserContext);
 
+  console.log("User context:", user);
+
   return (
     <aside className={styles.sidebar}>
       <nav className={styles.nav}>
@@ -60,6 +62,15 @@ export default function MainNav() {
             <NavLink to="/volunteer/directory" className={({isActive})=>
               isActive ? styles.activeLink : styles.link}>
                 Volunteer Directory
+            </NavLink>
+
+            <NavLink
+              to="/admin/applications"
+              className={({ isActive }) =>
+                isActive ? styles.activeLink : styles.link
+              }
+            >
+              Volunteer Applications
             </NavLink>
 
             <NavLink
