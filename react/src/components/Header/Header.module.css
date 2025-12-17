@@ -2,9 +2,9 @@
      display: flex;
      justify-content: center; 
      align-items: center;     
-     height: 50vh;                
+     height: 30vh;                
      background-color: #b2cbf2;
-     margin-top: 20vh;
+     margin-top: 15vh;
 }
 
 .bannerImage {
