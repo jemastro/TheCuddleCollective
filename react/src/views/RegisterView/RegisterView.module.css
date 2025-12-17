@@ -2,3 +2,136 @@
     margin-left: 165px;
     margin-right: 15px;
 }
+
+/* Container for the registration view */
+.viewRegister {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;               /* slightly shorter than full height */
+    padding: 1.5rem;
+    background-color: #B2CBF2;      /* soft blue background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Page title */
+.viewRegister h2 {
+    font-size: 1.8rem;               /* slightly smaller title */
+    margin-bottom: 1.2rem;
+    color: #333333;
+    text-align: center;
+}
+
+/* Notification container */
+.notificationWrapper {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 0.8rem;
+}
+
+/* Form container */
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;               /* compact width */
+    padding: 2rem;
+    background-color: #FFFFFF;       /* neutral background */
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); 
+    box-sizing: border-box;
+    margin: 0 auto;
+    border: 1px solid #D9D9D9;     /* subtle border */
+}
+
+/* Individual form fields */
+.formControl {
+    display: flex;
+    flex-direction: column;         /* stack label above input */
+    margin-bottom: 1.2rem;
+    width: 100%;
+}
+
+.formControl label {
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: #333333;
+    width: 100%;
+}
+
+/* Inputs */
+.formControl input {
+    padding: 0.75rem;
+    border: 1px solid #A0A0A0;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formControl input:focus {
+    border-color: #92B6F0;          /* darker blue focus */
+    box-shadow: 0 0 0 2.5px rgba(146, 182, 240, 0.3);
+    outline: none;
+}
+
+/* Submit button */
+.formButton {
+    padding: 0.65rem 1rem;          /* slightly smaller button */
+    background-color: #DF7234;      /* warm orange */
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.formButton:hover {
+    background-color: #D34F00;      /* darker orange hover */
+    transform: translateY(-1px);
+}
+
+.formButton:active {
+    transform: translateY(0);
+}
+
+/* Links */
+a {
+    color: #F49939;                 /* almost pinkish orange */
+    text-decoration: none;
+    font-weight: 500;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #D34F00;
+}
+
+.registerHeader{
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    form {
+        padding: 1.5rem;
+    }
+
+    .formControl input {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+
+    .formButton {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+    }
+}

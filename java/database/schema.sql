@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE parent(
-    parent_id int UNIQUE,
+    parent_id SERIAL PRIMARY KEY,
     first_name VARCHAR(150) NOT NULL,
     last_name VARCHAR(150) NOT NULL,
     phone_number VARCHAR(12) NOT NULL,
@@ -28,7 +28,8 @@ CREATE TABLE parent(
     street_name VARCHAR(150) NOT NULL,
     city_name VARCHAR(150) NOT NULL,
     state_abbreviation VARCHAR(2) NOT NULL,
-    CONSTRAINT PK_parent_id PRIMARY KEY (parent_id)
+    pet_name VARCHAR(150) NOT NULL,
+    image_url VARCHAR(500) NOT NULL
  );
 
 --Create table to store volunteers
@@ -56,7 +57,7 @@ CREATE TABLE available_pets (
     image_url1 VARCHAR(500) UNIQUE,
     image_url2 VARCHAR(500) UNIQUE,
     CONSTRAINT PK_animal_id PRIMARY KEY (animal_id),
-     CONSTRAINT FK_parent_id FOREIGN KEY (parent_id) REFERENCES parent(parent_id)
+    CONSTRAINT FK_parent_id FOREIGN KEY (parent_id) REFERENCES parent(parent_id)
     );
 
 --Create enum to only pull from available statuses

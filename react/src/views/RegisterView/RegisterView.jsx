@@ -49,7 +49,7 @@ export default function RegisterView() {
 
   return (
     <div id="view-register">
-      <h2>Register</h2>
+      <h2 className={styles.registerHeader}>Register</h2>
 
       <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
@@ -60,7 +60,6 @@ export default function RegisterView() {
             type="text"
             id="username"
             value={username}
-            size="50"
             required
             autoFocus
             autoComplete="username"
@@ -74,7 +73,6 @@ export default function RegisterView() {
             type="password"
             id="password"
             value={password}
-            size="50"
             required
             onChange={(event) => setPassword(event.target.value)}
           />
@@ -86,7 +84,6 @@ export default function RegisterView() {
             type="password"
             id="confirmPassword"
             value={confirmPassword}
-            size="50"
             required
             onChange={(event) => setConfirmPassword(event.target.value)}
           />

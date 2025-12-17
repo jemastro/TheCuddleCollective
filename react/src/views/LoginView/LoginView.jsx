@@ -54,13 +54,13 @@ export default function LoginView() {
 
         <div className="form-control">
           <label htmlFor="username">Username:</label>
-          <input type="text" id="username" value={username} size="50" required autoFocus autoComplete="username"
+          <input type="text" id="username" value={username} required autoFocus autoComplete="username"
               onChange={(event) => setUsername(event.target.value)} />
         </div>
 
         <div className="form-control">
           <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={password} size="50" required
+          <input type="password" id="password" value={password} required
               onChange={(event) => setPassword(event.target.value)} />
         </div>
 

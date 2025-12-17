@@ -48,6 +48,15 @@ export default function MainNav() {
               Add or Update Pets
             </NavLink>
 
+            <NavLink
+              to="/petparents"
+              className={({ isActive }) =>
+                isActive ? styles.activeLink : styles.link
+              }
+            >
+              Pet Parents
+            </NavLink>
+
             <NavLink to="/volunteer/directory" className={({isActive})=>
               isActive ? styles.activeLink : styles.link}>
                 Volunteer Directory
