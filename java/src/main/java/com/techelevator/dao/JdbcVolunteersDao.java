@@ -94,22 +94,6 @@ public class JdbcVolunteersDao implements VolunteerDao{
         return null;  // username not found
     }
 
-    public void applyVolunteerCode(String username, String code) {
-
-        Integer userId = jdbcTemplate.queryForObject(
-                "SELECT user_id FROM users WHERE username = ?",
-                Integer.class,
-                username
-        );
-
-        jdbcTemplate.update("""
-        UPDATE users
-        SET role = 'ROLE_VOLUNTEER',
-            first_login = false
-        WHERE user_id = ?
-        """, userId);
-    }
-
     private ShelterVolunteer mapRowToVolunteer(SqlRowSet rs){
         ShelterVolunteer shelterVolunteer = new ShelterVolunteer();
         shelterVolunteer.setVolunteerId(rs.getString("volunteer_id"));
