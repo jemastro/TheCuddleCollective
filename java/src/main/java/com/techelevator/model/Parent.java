@@ -1,22 +1,36 @@
 package com.techelevator.model;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 
 public class Parent {
 
 private long parentId;
     @NotBlank
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     @NotBlank
     private String lastName;
+
     @NotBlank
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "street_number")
     @NotBlank
     private int streetNumber;
+
     @NotBlank
+    @Column(name = "street_name")
     private String streetName;
+
     @NotBlank
+    @Column(name = "city_name")
     private String cityName;
+
+    @Column(name = "state_abbreviation")
     @NotBlank
     private String stateAbbreviation;
 
