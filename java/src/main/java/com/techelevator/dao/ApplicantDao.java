@@ -6,5 +6,5 @@ public interface ApplicantDao {
 
     Applicant submitApplication(Applicant applicant);
 
-    boolean applyInviteCode(String email, int userId, String inviteCode);
+    boolean applyInviteCode(String username, String inviteCode);
 }

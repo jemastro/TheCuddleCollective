@@ -37,30 +37,15 @@ public class VolunteerApplicationController {
 
     @PostMapping("/register/volunteer-code")
     public ResponseEntity<String> applyVolunteerCode(@RequestBody VolunteerCodeDto dto, Principal principal) {
-
         String username = principal.getName();
+        String code = dto.getCode().trim();
 
-        Integer userId = jdbcTemplate.queryForObject(
-                "SELECT user_id FROM users WHERE username = ?",
-                Integer.class,
-                username
-        );
-        String email = jdbcTemplate.queryForObject(
-                "SELECT email FROM users WHERE user_id = ?",
-                String.class,
-                userId
-        );
-        boolean success = applicantDao.applyInviteCode(
-                email,
-                userId,
-                dto.getCode()
-        );
+        boolean success = applicantDao.applyInviteCode(username, code);
+
         if (!success) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Invalid or already-used volunteer code"
-            );
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or already-used volunteer code");
         }
+
         return ResponseEntity.ok("Volunteer code accepted");
     }
 

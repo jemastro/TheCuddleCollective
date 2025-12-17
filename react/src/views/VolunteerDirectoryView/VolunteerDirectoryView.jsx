@@ -131,41 +131,41 @@ useEffect(() => {
         </thead>
         <tbody>
           {volunteers.map((volunteer) => (
-            <tr
-              key={volunteer.volunteerId}
-              className={selectedId === volunteer.volunteerId ? styles.selectedRow : ""}
-              onClick={() => handleSelect(volunteer)}
-            >
-              <td>{volunteer.firstName}</td>
-              <td>{volunteer.lastName}</td>
-              <td>{volunteer.email}</td>
-            {user?.authorities?.some(a => a.name === "ROLE_ADMIN") && (
-              <td><code>{volunteer.inviteCode || "—"}</code></td>
-            )}
-
+                <tr
+                key={volunteer.volunteerId}
+                className={selectedId === volunteer.volunteerId ? styles.selectedRow : ""}
+                onClick={() => handleSelect(volunteer)}
+                >
+                 <td>{volunteer.firstName}</td>
+                 <td>{volunteer.lastName}</td>
+                 <td>{volunteer.email}</td>
+                 {user?.authorities?.some(a => a.name === "ROLE_ADMIN") ? (
+                 <td><code>{volunteer.inviteCode || "—"}</code></td>
+                 ) : null}
             </tr>
+
           ))}
         </tbody>
       </table>
 
       <div className={styles.buttonContainer}>
-        {editingId && (
-          <button
+       {user?.authorities?.some(a => a.name === "ROLE_ADMIN") && editingId && (
+        <button
             className={styles.updateButton}
             onClick={handleUpdate}
             disabled={!formData.firstName || !formData.lastName || !formData.email}
-          >
+        >
             Update Volunteer
-          </button>
+        </button>
         )}
 
-        {selectedId && (
-          <button
+        {user?.authorities?.some(a => a.name === "ROLE_ADMIN") && selectedId && (
+        <button
             className={styles.deleteButton}
             onClick={handleDelete}
-          >
+        >
             Delete Volunteer
-          </button>
+        </button>
         )}
 
         {editingId && (
