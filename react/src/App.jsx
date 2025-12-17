@@ -17,6 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import AdoptedPets from './views/AdoptedPetsView/AdoptedPets';
+import PetParentView from './views/PetParentView/PetParentView';
 
 
 
@@ -57,6 +58,15 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <VolunteerDirectory />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/petparents"
+              element={
+                <ProtectedRoute>
+                  <PetParentView />
                 </ProtectedRoute>
               }
             />
