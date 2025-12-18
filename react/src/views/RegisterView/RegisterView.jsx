@@ -48,10 +48,10 @@ export default function RegisterView() {
   }
 
   return (
+  <>
+    <Notification notification={notification} clearNotification={() => setNotification(null)} />
     <div id="view-register">
       <h2 className={styles.registerHeader}>Register</h2>
-
-      <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
       <form onSubmit={handleSubmit}>
         <div className="form-control">
@@ -95,6 +95,6 @@ export default function RegisterView() {
         <Link to="/login">Have an account? Log in</Link>
       </form>
     </div>
-    
+</>
   );
 }
