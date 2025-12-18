@@ -29,7 +29,7 @@ CREATE TABLE parent(
     city_name VARCHAR(150) NOT NULL,
     state_abbreviation VARCHAR(2) NOT NULL,
     pet_name VARCHAR(150) NOT NULL,
-    image_url VARCHAR(500) NOT NULL
+    image_url VARCHAR(5000) NOT NULL
  );
 
 --Create table to store volunteers
@@ -53,9 +53,9 @@ CREATE TABLE available_pets (
     name VARCHAR(150) NOT NULL,
     parent_id int,
     adoption_status adoption_status_enum NOT NULL,
-    image_url VARCHAR(500) NOT NULL UNIQUE,
-    image_url1 VARCHAR(500) UNIQUE,
-    image_url2 VARCHAR(500) UNIQUE,
+    image_url VARCHAR(5000) NOT NULL UNIQUE,
+    image_url1 VARCHAR(5000) UNIQUE,
+    image_url2 VARCHAR(5000) UNIQUE,
     CONSTRAINT PK_animal_id PRIMARY KEY (animal_id),
     CONSTRAINT FK_parent_id FOREIGN KEY (parent_id) REFERENCES parent(parent_id)
     );
