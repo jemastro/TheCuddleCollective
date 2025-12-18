@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Applicant;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -56,57 +57,52 @@ public class JdbcApplicantDao implements ApplicantDao {
         return applicant;
     }
 
-    private String generateInviteCode(){
+    private String generateInviteCode() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789";
         SecureRandom random = new SecureRandom();
         StringBuilder code = new StringBuilder();
 
-        for(int i = 0;  i < 8; i++){
+        for (int i = 0; i < 8; i++) {
             code.append(chars.charAt(random.nextInt(chars.length())));
         }
 
         return code.toString();
     }
 
-    public boolean applyVolunteerCode(int userId, String inviteCode){
-        String sql = "SELECT volunteer_application_id FROM volunteer_applications WHERE invite_code = ? AND volunteer_application_status = 'approved' AND code_used = false";
+    public boolean applyInviteCode(String username, String inviteCode) {
 
-        Integer applicationId;
-
-        try{
-            applicationId = jdbcTemplate.queryForObject(sql, Integer.class, inviteCode);
-        } catch (Exception e) {
+        Integer userId;
+        try {
+            userId = jdbcTemplate.queryForObject(
+                    "SELECT user_id FROM users WHERE username = ?",
+                    Integer.class,
+                    username
+            );
+        } catch (EmptyResultDataAccessException e) {
             return false;
         }
-
-        String updateUserSql = "UPDATE users SET role = 'VOLUNTEER', first_login = FALSE WHERE user_id = ?";
-
-        jdbcTemplate.update(updateUserSql, userId);
-
-        String markUsedSql = "UPDATE volunteer_applications SET code_used = TRUE WHERE volunteer_application_id = ?";
-
-        jdbcTemplate.update(markUsedSql, applicationId);
-
-        return true;
-    }
-
-    @Override
-    public boolean applyInviteCode(String email, int userId, String inviteCode) {
-
-        String sql = "SELECT volunteer_application_id FROM volunteer_applications WHERE invite_code = ? AND email = ? AND volunteer_application_status = 'approved' AND code_used = false";
-
         Integer applicationId;
         try {
             applicationId = jdbcTemplate.queryForObject(
-                    sql, Integer.class, inviteCode, email
+                    "SELECT volunteer_application_id " +
+                            "FROM volunteer_applications " +
+                            "WHERE invite_code = ? " +
+                            "AND volunteer_application_status = 'approved' " +
+                            "AND code_used = false",
+                    Integer.class,
+                    inviteCode
             );
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             return false;
         }
-
-        jdbcTemplate.update("UPDATE users SET role = 'ROLE_VOLUNTEER', first_login = true WHERE user_id = ?", userId);
-
-        jdbcTemplate.update("UPDATE volunteer_applications SET code_used = true WHERE volunteer_application_id = ?", applicationId);
+        jdbcTemplate.update(
+                "UPDATE volunteer_applications SET code_used = true WHERE volunteer_application_id = ?",
+                applicationId
+        );
+        jdbcTemplate.update(
+                "UPDATE users SET role = 'ROLE_VOLUNTEER', first_login = false WHERE user_id = ?",
+                userId
+        );
 
         return true;
     }

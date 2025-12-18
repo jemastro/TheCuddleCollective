@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE parent(
-    parent_id SERIAL PRIMARY KEY,
+parent_id SERIAL PRIMARY KEY,
     first_name VARCHAR(150) NOT NULL,
     last_name VARCHAR(150) NOT NULL,
     phone_number VARCHAR(12) NOT NULL,
@@ -37,7 +37,9 @@ CREATE TABLE volunteers (
     volunteer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE
+    email VARCHAR(150) NOT NULL UNIQUE,
+	phone_number VARCHAR(50),
+	invite_code VARCHAR(20)
 );
 
 --Create enum to only pull from available values
@@ -45,7 +47,7 @@ CREATE TYPE adoption_status_enum AS ENUM ('pending', 'approved', 'rejected', 'av
 
 --Create table for available pets
 CREATE TABLE available_pets (
-    animal_id SERIAL,
+ animal_id SERIAL,
     animal_type VARCHAR(150) NOT NULL,
     breed VARCHAR(200) NOT NULL,
     color VARCHAR(150) NOT NULL,
@@ -72,7 +74,7 @@ CREATE TABLE volunteer_applications(
     email VARCHAR(150) NOT NULL UNIQUE,
     phone_number VARCHAR(12) NOT NULL UNIQUE,
 	invite_code VARCHAR(20),
-	code_used BOOLEAN,
+	code_used BOOLEAN DEFAULT false,
     volunteer_application_status volunteer_application_status_enum NOT NULL
 );
 
